@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beach Volleyball Tournaments 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing:border-box; margin:0; padding:0; }
+body {
+  font-family:'Noto Sans JP',sans-serif;
+  background: #0a1f35;
+  background-image:
+    radial-gradient(ellipse at 20% 30%, rgba(79,163,209,0.1) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 70%, rgba(46,196,182,0.08) 0%, transparent 60%);
+  min-height:100vh;
+  color:#fff;
+  padding:40px 20px 80px;
+}
+
+/* HEADER */
+.header { text-align:center; margin-bottom:48px; }
+.header-eye { font-size:11px; letter-spacing:5px; color:#E8C96A; margin-bottom:10px; font-weight:600; text-transform:uppercase; }
+.header h1 { font-family:'Bebas Neue',cursive; font-size:clamp(32px,6vw,64px); color:#fff; letter-spacing:4px; line-height:1; }
+.header h1 em { color:#2EC4B6; font-style:normal; }
+.header-sub { font-size:13px; color:rgba(255,255,255,0.5); margin-top:10px; letter-spacing:1px; }
+
+/* SEASON SECTION */
+.season { max-width:900px; margin:0 auto 40px; }
+.season-title {
+  font-family:'Bebas Neue',cursive;
+  font-size:16px; letter-spacing:4px;
+  color:rgba(255,255,255,0.4);
+  text-transform:uppercase;
+  border-bottom:1px solid rgba(255,255,255,0.1);
+  padding-bottom:10px;
+  margin-bottom:20px;
+}
+
+/* TOURNAMENT CARDS GRID */
+.grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:16px; }
+
+/* TOURNAMENT CARD */
+.card {
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.12);
+  border-radius:12px;
+  overflow:hidden;
+  text-decoration:none;
+  color:#fff;
+  transition:transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+  display:flex;
+  flex-direction:column;
+}
+.card:hover {
+  transform:translateY(-4px);
+  box-shadow:0 12px 32px rgba(0,0,0,0.3);
+  border-color:rgba(255,255,255,0.25);
+}
+.card-banner {
+  height:8px;
+  background:linear-gradient(90deg, #C9A84C, #E8C96A);
+}
+.card-banner.avc { background:linear-gradient(90deg, #1A8C85, #2EC4B6); }
+
+.card-body { padding:18px 18px 14px; flex:1; display:flex; flex-direction:column; }
+.card-series { font-size:9px; letter-spacing:3px; color:rgba(255,255,255,0.45); text-transform:uppercase; margin-bottom:6px; font-weight:600; }
+.card-title { font-family:'Bebas Neue',cursive; font-size:22px; letter-spacing:2px; line-height:1.1; margin-bottom:4px; }
+.card-subtitle { font-size:11px; color:rgba(255,255,255,0.55); margin-bottom:12px; }
+
+.card-meta { display:flex; flex-wrap:wrap; gap:6px; margin-top:auto; }
+.meta-tag {
+  font-size:9px; letter-spacing:1px; font-weight:600;
+  padding:3px 8px; border-radius:3px;
+  background:rgba(255,255,255,0.08);
+  color:rgba(255,255,255,0.6);
+  text-transform:uppercase;
+}
+.meta-tag.done { background:rgba(46,196,182,0.15); color:#2EC4B6; border:1px solid rgba(46,196,182,0.3); }
+.meta-tag.live { background:rgba(255,80,80,0.15); color:#FF8080; border:1px solid rgba(255,80,80,0.3); animation:pulse 1.5s infinite; }
+.meta-tag.upcoming { background:rgba(201,168,76,0.15); color:#E8C96A; border:1px solid rgba(201,168,76,0.3); }
+
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.6} }
+
+.card-footer {
+  padding:10px 18px;
+  border-top:1px solid rgba(255,255,255,0.08);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  font-size:11px;
+  color:rgba(255,255,255,0.4);
+}
+.card-arrow { font-size:16px; color:rgba(255,255,255,0.3); transition:color 0.2s, transform 0.2s; }
+.card:hover .card-arrow { color:#2EC4B6; transform:translateX(4px); }
+
+/* JPN badge */
+.jpn-badge {
+  display:inline-flex; align-items:center; gap:4px;
+  font-size:9px; font-weight:700; letter-spacing:1px;
+  color:#2EC4B6; background:rgba(46,196,182,0.1);
+  border:1px solid rgba(46,196,182,0.3);
+  padding:2px 8px; border-radius:3px;
+  text-transform:uppercase;
+}
+
+/* FOOTER */
+.footer { text-align:center; margin-top:60px; font-size:11px; color:rgba(255,255,255,0.2); letter-spacing:2px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-eye">Tournament Hub</div>
+  <h1>Beach <em>Volleyball</em><br>Japan 2026</h1>
+  <div class="header-sub">大会トーナメント表・試合結果</div>
+</div>
+
+<!-- DOMESTIC -->
+<div class="season">
+  <div class="season-title">🇯🇵 Japan Beach Volleyball Tour 2026</div>
+  <div class="grid">
+
+    <a class="card" href="nagoya.html">
+      <div class="card-banner"></div>
+      <div class="card-body">
+        <div class="card-series">JBVT 2026 · 第1戦</div>
+        <div class="card-title">名古屋大会</div>
+        <div class="card-subtitle">第20回アジア競技大会 日本代表選考会</div>
+        <div class="card-meta">
+          <span class="meta-tag">5/23 – 5/31</span>
+          <span class="meta-tag">男子 · 女子</span>
+          <span class="meta-tag done">✓ 結果確定</span>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span>トーナメント表を見る</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <a class="card" href="osaka.html">
+      <div class="card-banner"></div>
+      <div class="card-body">
+        <div class="card-series">JBVT 2026 · 第2戦</div>
+        <div class="card-title">グランドスラム<br>グランフロント大阪大会</div>
+        <div class="card-subtitle">グランドスラム · 6/6–7 Jun 2026</div>
+        <div class="card-meta">
+          <span class="meta-tag">6/6 – 6/7</span>
+          <span class="meta-tag">男子 · 女子</span>
+          <span class="meta-tag done">✓ 結果確定</span>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span>トーナメント表を見る</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+  </div>
+</div>
+
+<!-- INTERNATIONAL -->
+<div class="season">
+  <div class="season-title">🌏 AVC Beach Tour 2026</div>
+  <div class="grid">
+
+    <a class="card" href="pingtung.html">
+      <div class="card-banner avc"></div>
+      <div class="card-body">
+        <div class="card-series">AVC Beach Tour · 2nd</div>
+        <div class="card-title">Pingtung Open</div>
+        <div class="card-subtitle">Pingtung, Taiwan · 04–07 Jun 2026</div>
+        <div class="card-meta">
+          <span class="meta-tag">Jun 4 – 7</span>
+          <span class="meta-tag">Men's · Women's</span>
+          <span class="meta-tag done">✓ Results In</span>
+          <span class="jpn-badge">🇯🇵 JPN</span>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span>View Tournament</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+  </div>
+</div>
+
+<div class="footer">BEACH VOLLEYBALL JAPAN 2026 · TOURNAMENT HUB</div>
+
+</body>
+</html>

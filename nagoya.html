@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1200, initial-scale=0.25, user-scalable=yes, minimum-scale=0.1, maximum-scale=5.0">
+<title>JAPAN BVT 2026 第1戦 名古屋大会</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --gold: #C9A84C;
+  --gold-light: #E8C96A;
+  --ocean: #1A5C8A;
+  --sky: #4FA3D1;
+  --white: #FFFFFF;
+  --gray: #9BA5B0;
+  --gray-light: #EEF1F4;
+  --text: #1A2533;
+  --bye-bg: #EDF5FF;
+  --bye-border: #4FA3D1;
+  --card-h: 128px;
+  --gap: 8px;
+  --slot: calc(var(--card-h) + var(--gap));
+}
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: #0a1f35;
+  min-height: 100vh;
+  color: var(--text);
+  padding: 20px 16px 60px;
+}
+
+/* HEADER */
+.hd { text-align:center; margin-bottom:20px; }
+.hd-eye { font-size:10px; letter-spacing:4px; color:var(--gold-light); margin-bottom:6px; }
+.hd h1 { font-family:'Bebas Neue',cursive; font-size:clamp(22px,4vw,42px); color:#fff; letter-spacing:3px; line-height:1.1; }
+.hd h1 em { color:var(--gold-light); font-style:normal; }
+.hd-meta { display:flex; justify-content:center; gap:10px; margin-top:8px; flex-wrap:wrap; }
+.hd-tag { background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:rgba(255,255,255,0.75); font-size:10px; letter-spacing:2px; padding:3px 10px; border-radius:20px; }
+
+/* TOGGLE BUTTONS */
+.toggle-wrap { display:flex; justify-content:center; gap:10px; margin-bottom:24px; }
+.toggle-btn {
+  font-family:'Bebas Neue',cursive; font-size:15px; letter-spacing:3px;
+  padding:8px 28px; border-radius:6px; border:2px solid rgba(255,255,255,0.25);
+  background:rgba(255,255,255,0.08); color:rgba(255,255,255,0.6);
+  cursor:pointer; transition:all 0.2s;
+}
+.toggle-btn.active {
+  background:var(--gold); border-color:var(--gold); color:#fff;
+  box-shadow:0 2px 12px rgba(201,168,76,0.4);
+}
+.toggle-btn:hover:not(.active) { background:rgba(255,255,255,0.15); color:#fff; }
+
+/* BRACKET */
+.bracket-scroll { overflow-x:auto; padding-bottom:16px; }
+.bracket { display:flex; align-items:flex-start; min-width:max-content; gap:0; }
+.view { display:none; }
+.view.active { display:block; }
+
+/* ROUND */
+.round { display:flex; flex-direction:column; align-items:stretch; flex-shrink:0; width:196px; }
+.round-label { font-family:'Bebas Neue',cursive; font-size:11px; letter-spacing:2px; color:rgba(255,255,255,0.6); text-align:center; height:44px; line-height:16px; margin-bottom:6px; flex-shrink:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; }
+.date-sub { font-family:'Noto Sans JP',sans-serif; font-size:11px; font-weight:700; color:var(--gold-light); letter-spacing:1px; }
+
+/* SLOTS */
+.slot { display:flex; flex-direction:column; justify-content:flex-start; flex-shrink:0; }
+.r1 .slot { height:var(--slot); }
+.r1 .slot:last-child { height:var(--card-h); }
+.r2 .slot { height:calc(var(--slot)*2); }
+.r2 .slot:last-child { height:calc(var(--slot)*2 - var(--gap)); }
+.r2 .slot .match { margin-top:calc((var(--slot)*2 - var(--card-h))/2); }
+.qf .slot { height:calc(var(--slot)*4); }
+.qf .slot:last-child { height:calc(var(--slot)*4 - var(--gap)); }
+.qf .slot .match { margin-top:calc((var(--slot)*4 - var(--card-h))/2); }
+.sf .slot { height:calc(var(--slot)*8); }
+.sf .slot:last-child { height:calc(var(--slot)*8 - var(--gap)); }
+.sf .slot .match { margin-top:calc((var(--slot)*8 - var(--card-h))/2); }
+.fin .slot { height:calc(var(--slot)*16 - var(--gap)); }
+.fin .slot .match { margin-top:calc((var(--slot)*16 - var(--card-h))/2); }
+
+/* CARD */
+.match {
+  width:196px; height:var(--card-h);
+  background:var(--white); border-radius:7px;
+  overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.18);
+  display:flex; flex-direction:column; flex-shrink:0;
+}
+.match.bye-match { border:1.5px solid var(--bye-border); background:var(--bye-bg); }
+
+/* SCORE DIVIDER */
+.score-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 8px;
+  background: #F5F7FA;
+  border-top: 1px solid var(--gray-light);
+  border-bottom: 1px solid var(--gray-light);
+  gap: 4px;
+  flex-shrink: 0;
+}
+.score-set { font-size:11px; font-weight:700; color:var(--text); }
+.score-points { font-size:9px; color:var(--gray); }
+#bracket-women .score-divider { background: #FDF5F8; }
+
+/* WINNER / LOSER STYLING */
+.team.winner { background: linear-gradient(90deg,#FFFAED,#FFF8E7); }
+.team.winner .p1, .team.winner .p2 { font-weight:700; color:var(--text); }
+.team.loser .p1, .team.loser .p2 { color:var(--gray); }
+
+#bracket-women .team.winner { background: linear-gradient(90deg,#FFF0F7,#FFE4F0); }
+
+/* MATCH INFO BAR */
+.match-info {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 7px;
+  background: rgba(26,92,138,0.08);
+  border-bottom: 1px solid var(--gray-light);
+  flex-shrink: 0;
+}
+.match-info .mno { font-family:'Bebas Neue',cursive; font-size:9px; letter-spacing:1px; color:var(--ocean); flex-shrink:0; }
+.match-info .mtime { font-size:9px; font-weight:700; color:var(--text); flex-shrink:0; }
+.match-info .mcourt { font-size:9px; color:var(--gray); flex-shrink:0; }
+.match-info .mdot { font-size:8px; color:var(--gray-light); }
+#bracket-women .match-info { background: rgba(194,24,91,0.06); }
+#bracket-women .match-info .mno { color: #C2185B; }
+.match.bye-match .match-info { background: rgba(79,163,209,0.08); }
+#bracket-women .match.bye-match .match-info { background: rgba(233,30,140,0.08); }
+
+/* TEAM ROW */
+.team { flex:1; display:flex; flex-direction:column; justify-content:center; padding:4px 9px; border-bottom:1px solid var(--gray-light); }
+.team:last-child { border-bottom:none; }
+.team-top { display:flex; align-items:center; gap:5px; }
+.badge { font-size:8px; font-weight:700; color:#fff; background:var(--ocean); border-radius:3px; padding:1px 4px; flex-shrink:0; }
+.badge.bye { background:var(--sky); }
+.badge.tbd { background:#bbb; }
+.p1 { font-size:11px; font-weight:500; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; flex:1; }
+.p2 { font-size:11px; font-weight:500; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; padding-left:20px; margin-top:1px; }
+.dim .p1, .dim .p2 { color:var(--gray); }
+
+/* CONNECTOR */
+.conn { width:28px; flex-shrink:0; position:relative; }
+.conn svg { position:absolute; top:0; left:0; width:28px; overflow:visible; }
+
+/* DATE DIVIDER */
+.date-divider { width:2px; flex-shrink:0; margin:0 4px; position:relative; }
+.date-divider::after { content:''; position:absolute; top:0; bottom:0; left:0; width:2px; border-left:2px dashed rgba(79,163,209,0.5); }
+
+/* CHAMPION */
+.champ-wrap { flex-shrink:0; padding-left:8px; display:flex; flex-direction:column; }
+.champ-card { background:linear-gradient(135deg,#B8862E,#E8C96A,#B8862E); border-radius:10px; padding:14px 12px; width:140px; text-align:center; color:#fff; box-shadow:0 4px 20px rgba(201,168,76,0.4); }
+
+/* WOMEN'S PINK THEME */
+/* Women colors applied via .women-active on the bracket div */
+#bracket-women .badge { background: #C2185B; }
+#bracket-women .badge.bye { background: #E91E8C; }
+#bracket-women .badge.tbd { background: #bbb; }
+#bracket-women .match.bye-match { border-color: #E91E8C; background: #FFF0F7; }
+#bracket-women .team { border-bottom-color: #FCE4EC; }
+#bracket-women .date-sub { color: #F48FB1; }
+#bracket-women .champ-card { background: linear-gradient(135deg,#880E4F,#F06292,#880E4F); box-shadow: 0 4px 20px rgba(194,24,91,0.4); }
+#view-women .date-divider::after { border-left-color: rgba(233,30,140,0.45); }
+#bracket-women ~ .date-divider::after { border-left-color: rgba(233,30,140,0.45); }
+</style>
+</head>
+<body>
+
+<div class="hd">
+  <div class="hd-eye">Japan Beach Volleyball Tour 2026</div>
+  <h1>第1戦 <em>名古屋大会</em><br>トーナメント表</h1>
+  <div class="hd-meta">
+    <span class="hd-tag" id="tag-gender">MEN'S</span>
+    <span class="hd-tag">アジア大会代表選考会</span>
+  </div>
+</div>
+
+<div class="toggle-wrap">
+  <button class="toggle-btn active" onclick="switchView('men',this)">男子</button>
+  <button class="toggle-btn" onclick="switchView('women',this)">女子</button>
+</div>
+
+<div class="view active" id="view-men"><div class="bracket-scroll"><div class="bracket" id="bracket-men"></div></div></div>
+<div class="view" id="view-women"><div class="bracket-scroll"><div class="bracket" id="bracket-women"></div></div></div>
+
+<script>
+// ===== SWITCH =====
+function updateChampion(gender) {
+  const p1 = document.getElementById('champ-p1');
+  const p2 = document.getElementById('champ-p2');
+  if (!p1 || !p2) return;
+  if (gender === 'men') {
+    p1.textContent = '水町 泰杜';
+    p2.textContent = '黒澤 孝太';
+  } else {
+    p1.textContent = '伊藤 桜';
+    p2.textContent = '沢目 繭';
+  }
+}
+function switchView(gender, btn) {
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.toggle-btn').forEach(b=>{
+    b.classList.remove('active');
+    b.style.background=''; b.style.borderColor='';
+  });
+  document.getElementById('view-'+gender).classList.add('active');
+  btn.classList.add('active');
+  if(gender==='women'){ btn.style.background='#C2185B'; btn.style.borderColor='#C2185B'; }
+  document.getElementById('tag-gender').textContent = gender==='men' ? "MEN'S" : "WOMEN'S";
+  requestAnimationFrame(()=>requestAnimationFrame(()=>drawBracket('bracket-'+gender)));
+  updateChampion(gender);
+}
+
+// ===== SEED DATA =====
+const MEN = [null,
+  {p1:'髙橋 巧',          p2:'池田 隼平'},
+  {p1:'石島 雄介',        p2:'立谷 純太郎'},
+  {p1:'黒川 寛輝ディラン',p2:'長谷川 徳海'},
+  {p1:'黒川 魁',          p2:'安達 龍一'},
+  {p1:'マルキ ナシム',    p2:'詫間 悠'},
+  {p1:'関 寛之',          p2:'藤田 丈太郎'},
+  {p1:'美保 幸輝',        p2:'髙橋 大地'},
+  {p1:'伊藤 遼河',        p2:'石川 瀬那'},
+  {p1:'富田 昂馬',        p2:'佐藤 亮太'},
+  {p1:'福嶋 晃介',        p2:'上田 翔貴'},
+  {p1:'渡辺 周馬',        p2:'今村 貴彦'},
+  {p1:'清水 啓輔',        p2:'勝岡 将斗'},
+  {p1:'水町 泰杜',        p2:'黒澤 孝太'},
+  {p1:'古田 史郎',        p2:'辰巳 遼'},
+  {p1:'松井 晴皆',        p2:'梅野 涼'},
+  {p1:'今井 駿世',        p2:'山田 陽平'},
+  {p1:'進藤 涼',          p2:'髙崎 裕麻'},
+  {p1:'西村 勇斗',        p2:'佐々木 達郎'},
+  {p1:'竹内 快斗',        p2:'我妻 陸'},
+  {p1:'伊吹 政人',        p2:'辻 琉斗'},
+  {p1:'後藤 圭将',        p2:'今井 勇太'},
+  {p1:'小島 利治',        p2:'佐藤 賢聖'},
+  {p1:'濵口 蒼太',        p2:'溝端 拓真', le:true},
+  {p1:'浜田 翔太',        p2:'戸田 拓也', le:true},
+  {p1:'高江 証詞',        p2:'池田 大心', le:true},
+  {p1:'波紫 伊那蔵',      p2:'松下 道一', le:true},
+  {p1:'田崎 颯太',        p2:'小野寺 暉', le:true},
+  {p1:'渡邊 玲央',        p2:'平井 学',   le:true},
+];
+
+const WOMEN = [null,
+  {p1:'松本 恋',  p2:'松本 穏'},
+  {p1:'柴 麻美',  p2:'村上 礼華'},
+  {p1:'伊藤 桜',  p2:'沢目 繭'},
+  {p1:'石井 美樹',p2:'菊地 真結'},
+  {p1:'酒井 春海',p2:'坪内 紫苑'},
+  {p1:'白幡 亜美',p2:'福田 鈴菜'},
+  {p1:'中川 知香',p2:'秋重 若菜'},
+  {p1:'本村 嘉菜',p2:'本村 成優'},
+  {p1:'辻村 りこ',p2:'西堀 健実'},
+  {p1:'藤井 桜子',p2:'藪見 真歩'},
+  {p1:'溝江 明香',p2:'宇都木 乃愛'},
+  {p1:'衣笠 乃愛',p2:'石原 泉'},
+  {p1:'山田 紗也香',p2:'森 愛唯'},
+  {p1:'水上 和葉',p2:'笹渡 美海'},
+  {p1:'金田 洋世',p2:'樫原 美陽'},
+  {p1:'三木 庸子',p2:'岡田 典代'},
+  {p1:'江原 あかり',p2:'鏡 瀬里奈'},
+  {p1:'岡村 真衣',p2:'石川 綾菜'},
+  {p1:'瀧澤 結羽',p2:'小林 多希理'},
+  {p1:'オト 恵美里',p2:'谷島 花虹'},
+  {p1:'片桐 菜摘',p2:'櫻井 いづみ'},
+  {p1:'菅原 和子',p2:'梅木 瞳'},
+  {p1:'澁谷 真央',p2:'桂川 こなつ'},
+  {p1:'北野 優心',p2:'湯田 笑夢', le:true},
+  {p1:'伊藤 美玲',p2:'遠藤 美波', le:true},
+  {p1:'唐澤 真唯',p2:'荒田 蓮珠', le:true},
+  {p1:'牧 悠菜',  p2:'本田 安依梨',le:true},
+];
+
+// ===== SLOTS =====
+// Match info: {no, time, court}
+const MEN_INFO = [
+  {no:'M#1', time:'',      court:'Court A'}, // slot0  BYE1
+  {no:'M#2', time:'9:00',  court:'Court C'}, // slot1  16v17
+  {no:'M#3', time:'9:00',  court:'Court A'}, // slot2  9v24
+  {no:'M#4', time:'10:00', court:'Court C'}, // slot3  25v8
+  {no:'M#5', time:'10:00', court:'Court A'}, // slot4  5v28
+  {no:'M#6', time:'11:00', court:'Court C'}, // slot5  21v12
+  {no:'M#7', time:'11:00', court:'Court A'}, // slot6  20v13
+  {no:'M#8', time:'',      court:'Court C'}, // slot7  BYE4
+  {no:'M#9', time:'',      court:'Court A'}, // slot8  BYE3
+  {no:'M#10',time:'12:00', court:'Court C'}, // slot9  19v14
+  {no:'M#11',time:'12:00', court:'Court A'}, // slot10 11v22
+  {no:'M#12',time:'13:00', court:'Court C'}, // slot11 27v6
+  {no:'M#13',time:'13:00', court:'Court A'}, // slot12 7v26
+  {no:'M#14',time:'14:00', court:'Court C'}, // slot13 23v10
+  {no:'M#15',time:'14:00', court:'Court A'}, // slot14 15v18
+  {no:'M#16',time:'',      court:'Court C'}, // slot15 BYE2
+];
+const WOMEN_INFO = [
+  {no:'W#1', time:'',      court:'Court D'}, // slot0  BYE1
+  {no:'W#2', time:'9:00',  court:'Court F'}, // slot1  16v17
+  {no:'W#3', time:'9:00',  court:'Court D'}, // slot2  9v24
+  {no:'W#4', time:'10:00', court:'Court F'}, // slot3  25v8
+  {no:'W#5', time:'',      court:'Court D'}, // slot4  BYE5
+  {no:'W#6', time:'11:00', court:'Court F'}, // slot5  12v21
+  {no:'W#7', time:'10:00', court:'Court D'}, // slot6  20v13
+  {no:'W#8', time:'',      court:'Court F'}, // slot7  BYE4
+  {no:'W#9', time:'',      court:'Court D'}, // slot8  BYE3
+  {no:'W#10',time:'12:00', court:'Court F'}, // slot9  19v14
+  {no:'W#11',time:'11:00', court:'Court D'}, // slot10 11v22
+  {no:'W#12',time:'13:00', court:'Court F'}, // slot11 27v6
+  {no:'W#13',time:'12:00', court:'Court D'}, // slot12 7v26
+  {no:'W#14',time:'14:00', court:'Court D'}, // slot13 23v10
+  {no:'W#15',time:'13:00', court:'Court D'}, // slot14 15v18
+  {no:'W#16',time:'',      court:'Court F'}, // slot15 BYE2
+];
+
+const MEN_R2_WINNERS  = [1, 8, 12, 13, 14, 6, 10, 2];
+const WOMEN_R2_WINNERS = [1, 9, 12, 4, 3, 6, 7, 2];
+const MEN_R2_SCORES   = ["2-0 (21-9,21-13)", "0-2 (17-21,16-21)", "1-2 (15-21,21-17,13-15)", "2-0 (21-17,22-20)", "1-2 (22-24,21-11,11-15)", "0-2 (19-21,17-21)", "0-2 (21-23,15-21)", "0-2 (13-21,15-21)"];
+const WOMEN_R2_SCORES = ["2-0 (21-13,21-11)", "2-0 (21-18,21-8)", "0-2 (16-21,16-21)", "0-2 (13-21,17-21)", "2-0 (21-19,21-15)", "1-2 (14-21,26-24,14-16)", "2-1 (16-21,21-18,15-11)", "1-2 (15-21,21-16,12-15)"];
+const MEN_QF_WINNERS  = [1, 13, 6, 2];
+const WOMEN_QF_WINNERS = [1, 4, 3, 2];
+const MEN_QF_SCORES   = ["2-0 (21-14,21-16)", "1-2 (21-16,12-21,11-15)", "1-2 (20-22,21-19,10-15)", "1-2 (23-21,12-21,13-15)"];
+const WOMEN_QF_SCORES = ["2-0 (21-12,21-13)", "0-2 (9-21,9-21)", "2-0 (21-15,21-19)", "0-2 (14-21,15-21)"];
+const MEN_SF_WINNERS  = [13, 2];
+const WOMEN_SF_WINNERS = [1, 3];
+const MEN_SF_SCORES   = ["1-2 (21-14,13-21,13-15)", "0-2 (14-21,15-21)"];
+const WOMEN_SF_SCORES = ["2-1 (21-17,14-21,15-8)", "2-1 (18-21,21-16,16-14)"];
+const MEN_FIN_SEEDS   = [13, 2];
+const WOMEN_FIN_SEEDS = [1, 3];
+const MEN_FIN_WINNERS  = [13];
+const WOMEN_FIN_WINNERS= [3];
+const MEN_FIN_SCORES  = ["2-0 (21-16,21-11)"];
+const WOMEN_FIN_SCORES= ["1-2 (21-15,18-21,18-20)"];
+const MEN_SF_SEEDS    = [[1, 13], [6, 2]];
+const WOMEN_SF_SEEDS  = [[1, 4], [3, 2]];
+const MEN_QF_SEEDS    = [[1, 8], [12, 13], [14, 6], [10, 2]];
+const WOMEN_QF_SEEDS  = [[1, 9], [12, 4], [3, 6], [7, 2]];
+const MEN_QF_INFO = [
+  {no:'M#25', time:'13:30', court:'Court 1'},
+  {no:'M#26', time:'14:30', court:'Court 1'},
+  {no:'M#27', time:'16:30', court:'Court 1'},
+  {no:'M#28', time:'15:30', court:'Court 1'},
+];
+const WOMEN_QF_INFO = [
+  {no:'W#25', time:'8:45',  court:'Court 1'},
+  {no:'W#26', time:'9:45',  court:'Court 1'},
+  {no:'W#27', time:'11:45', court:'Court 1'},
+  {no:'W#28', time:'10:45', court:'Court 1'},
+];
+const MEN_SF_INFO = [
+  {no:'M#29', time:'11:00', court:'Court 1'},
+  {no:'M#30', time:'12:00', court:'Court 1'},
+];
+const WOMEN_SF_INFO = [
+  {no:'W#29', time:'9:00',  court:'Court 1'},
+  {no:'W#30', time:'10:00', court:'Court 1'},
+];
+const MEN_FIN_INFO   = [{no:'M#31', time:'14:00', court:'Court 1'}];
+const WOMEN_FIN_INFO = [{no:'W#31', time:'13:00', court:'Court 1'}];
+
+const MEN_R2_INFO = [
+  {no:'M#17', time:'9:00',  court:'Court C'},
+  {no:'M#18', time:'9:50',  court:'Court C'},
+  {no:'M#19', time:'10:40', court:'Court C'},
+  {no:'M#20', time:'11:30', court:'Court C'},
+  {no:'M#21', time:'12:20', court:'Court C'},
+  {no:'M#22', time:'13:10', court:'Court C'},
+  {no:'M#23', time:'14:00', court:'Court C'},
+  {no:'M#24', time:'14:50', court:'Court C'},
+];
+const WOMEN_R2_INFO = [
+  {no:'W#17', time:'9:00',  court:'Court D'},
+  {no:'W#18', time:'9:50',  court:'Court D'},
+  {no:'W#19', time:'10:40', court:'Court D'},
+  {no:'W#20', time:'11:30', court:'Court D'},
+  {no:'W#21', time:'12:20', court:'Court D'},
+  {no:'W#22', time:'13:10', court:'Court D'},
+  {no:'W#23', time:'14:00', court:'Court D'},
+  {no:'W#24', time:'14:50', court:'Court D'},
+];
+
+const MEN_WINNERS  = [1,16,9,8,5,12,13,4,3,14,11,6,7,10,15,2];
+const WOMEN_WINNERS = [1,17,9,8,5,12,13,4,3,14,11,6,7,10,15,2];
+const MEN_SCORES   = [null,'2-1 (21-19,13-21,11-15)','2-0 (21-13,21-14)','0-2 (12-21,10-21)','2-0 (21-12,21-9)','0-2 (9-21,15-21)','0-2 (16-21,14-21)',null,null,'0-2 (13-21,16-21)','2-0 (21-8,21-11)','0-2 (12-21,16-21)','2-1 (16-21,21-16,15-13)','0-2 (10-21,16-21)','2-1 (21-10,12-21,15-12)',null];
+const WOMEN_SCORES = [null,'1-2 (19-21,21-17,7-15)','2-0 (21-16,21-13)','0-2 (14-21,10-21)',null,'2-0 (21-12,21-11)','0-2 (15-21,9-21)',null,null,'1-2 (12-21,21-18,10-15)','2-0 (21-9,21-13)','0-2 (15-21,13-21)','2-0 (21-10,21-6)','0-2 (12-21,9-21)','2-0 (21-19,21-18)',null];
+
+const MEN_SLOTS = [
+  {bye:1},      {a:16,b:17},  {a:9,b:24},   {a:25,b:8},
+  {a:5,b:28},   {a:21,b:12},  {a:20,b:13},  {bye:4},
+  {bye:3},      {a:19,b:14},  {a:11,b:22},  {a:27,b:6},
+  {a:7,b:26},   {a:23,b:10},  {a:15,b:18},  {bye:2},
+];
+
+const WOMEN_SLOTS = [
+  {bye:1},      {a:16,b:17},  {a:9,b:24},   {a:25,b:8},
+  {bye:5},      {a:12,b:21},  {a:20,b:13},  {bye:4},
+  {bye:3},      {a:19,b:14},  {a:11,b:22},  {a:27,b:6},
+  {a:7,b:26},   {a:23,b:10},  {a:15,b:18},  {bye:2},
+];
+
+// ===== CARD BUILDERS =====
+function le(s){ return s&&s.le?`<span style="font-size:8px;color:#4FA3D1;font-weight:700;margin-left:3px;">LE</span>`:''; }
+
+function seedRow(S, n, result){
+  const s=S[n];
+  const cls = result==='win'?'winner':result==='lose'?'loser':'';
+  const badgeCls = s&&s.le?'le':'normal';
+  return `<div class="team ${cls}">
+    <div class="team-top"><span class="badge ${badgeCls}">${n}</span><span class="p1">${s.p1}${le(s)}</span></div>
+    <div class="p2">${s.p2}</div>
+  </div>`;
+}
+function byeRow(){
+  return `<div class="team dim">
+    <div class="team-top"><span class="badge bye">BYE</span><span class="p1" style="color:var(--sky);">2回戦シード</span></div>
+    <div class="p2" style="color:var(--gray);">-</div>
+  </div>`;
+}
+function tbdRow(){
+  return `<div class="team dim">
+    <div class="team-top"><span class="badge tbd">?</span><span class="p1">TBD</span></div>
+    <div class="p2">-</div>
+  </div>`;
+}
+function infoBar(no, time, court){
+  if(!no) return '';
+  const timeStr = time && time!=='--:--' ? `<span class="mtime">${time}</span><span class="mdot">·</span>` : '';
+  return `<div class="match-info"><span class="mno">${no}</span>${timeStr}<span class="mcourt">${court||''}</span></div>`;
+}
+function byeCard(S,n,info){ return `<div class="match bye-match">${info?infoBar(info.no,info.time,info.court):''}${seedRow(S,n,'win')}${byeRow()}</div>`; }
+function scoreDivider(scoreStr){
+  if(!scoreStr) return '';
+  // scoreStr format: "setA-setB (points)" where A=upper team, B=lower team
+  const match = scoreStr.match(/^(\d+)-(\d+)\s*\(([^)]+)\)$/);
+  if(!match) return '';
+  const setA = match[1], setB = match[2], points = match[3];
+  return `<div class="score-divider">
+    <span class="score-set">${setA}</span>
+    <span class="score-points">(${points})</span>
+    <span class="score-set">${setB}</span>
+  </div>`;
+}
+
+function r1Card(S,a,b,info,winSeed){
+  const rA=winSeed===a?'win':winSeed?'lose':'';
+  const rB=winSeed===b?'win':winSeed?'lose':'';
+  // _score is stored on winner seed but we need score from upper(a) perspective
+  const scoreStr = S[a]&&S[a]._score ? S[a]._score : (S[b]&&S[b]._score ? S[b]._score : null);
+  const sc = scoreStr ? scoreDivider(scoreStr) : '';
+  return `<div class="match">${info?infoBar(info.no,info.time,info.court):''}${seedRow(S,a,rA)}${sc}${seedRow(S,b,rB)}</div>`;
+}
+function emptyCard(){ 
+  return `<div class="match">${tbdRow()}${tbdRow()}</div>`; 
+}
+function r2Card(info, S, seedA, seedB, winSeed, scoreStr){
+  const bar = info ? infoBar(info.no, info.time, info.court) : '';
+  const rA = winSeed===seedA?'win':winSeed?'lose':'';
+  const rB = winSeed===seedB?'win':winSeed?'lose':'';
+  const rowA = (seedA && S && S[seedA]) ? seedRow(S, seedA, rA) : tbdRow();
+  const rowB = (seedB && S && S[seedB]) ? seedRow(S, seedB, rB) : tbdRow();
+  const sc = scoreStr ? scoreDivider(scoreStr) : '';
+  return `<div class="match">${bar}${rowA}${sc}${rowB}</div>`;
+}
+
+function round(cls, label, cards){
+  return `<div class="round ${cls}"><div class="round-label">${label}</div>${cards.map(c=>`<div class="slot">${c}</div>`).join('')}</div>`;
+}
+function conn(id){ return `<div class="conn" id="c${id}"><svg id="s${id}"></svg></div>`; }
+function divider(id){ return `<div class="date-divider" id="d${id}"></div>`; }
+function champCard(){
+  return `<div class="champ-wrap" id="champ">
+    <div class="round-label" style="opacity:0">-</div>
+    <div style="display:flex;align-items:center;padding-top:0;" id="champ-inner">
+      <div class="champ-card">
+        <div style="font-size:26px;margin-bottom:4px;">🏆</div>
+        <div style="font-family:'Bebas Neue',cursive;font-size:11px;letter-spacing:3px;opacity:0.85;margin-bottom:4px;">CHAMPION</div>
+        <div style="font-size:13px;font-weight:700;">-</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function buildBracket(bracketId, S, slots) {
+  const INFO = bracketId==='bracket-men' ? MEN_INFO : WOMEN_INFO;
+  const WINNERS = bracketId==='bracket-men' ? MEN_WINNERS : WOMEN_WINNERS;
+  const SCORES  = bracketId==='bracket-men' ? MEN_SCORES  : WOMEN_SCORES;
+  const r1 = slots.map((s,i) => {
+    if(s.bye) return byeCard(S,s.bye,INFO[i]);
+    const w=WINNERS[i], sc=SCORES[i];
+    // Store score on upper team (a) so display is always upper vs lower perspective
+    if(sc && S[s.a]) S[s.a]._score=sc;
+    return r1Card(S,s.a,s.b,INFO[i],w);
+  });
+  const R2_INFO  = bracketId==='bracket-men' ? MEN_R2_INFO : WOMEN_R2_INFO;
+  const R2_SEEDS = bracketId==='bracket-men'
+    ? [[1,16],[9,8],[5,12],[13,4],[3,14],[11,6],[7,10],[15,2]]
+    : [[1,17],[9,8],[5,12],[13,4],[3,14],[11,6],[7,10],[15,2]];
+  const R2_WINNERS = bracketId==='bracket-men' ? MEN_R2_WINNERS : WOMEN_R2_WINNERS;
+  const R2_SCORES_DATA = bracketId==='bracket-men' ? MEN_R2_SCORES : WOMEN_R2_SCORES;
+  const r2 = Array(8).fill(0).map((_,i) => r2Card(R2_INFO[i], S, R2_SEEDS[i][0], R2_SEEDS[i][1], R2_WINNERS[i]||null, R2_SCORES_DATA[i]||null));
+  const QF_SEEDS   = bracketId==='bracket-men' ? MEN_QF_SEEDS   : WOMEN_QF_SEEDS;
+  const QF_INFO    = bracketId==='bracket-men' ? MEN_QF_INFO    : WOMEN_QF_INFO;
+  const QF_WINNERS = bracketId==='bracket-men' ? MEN_QF_WINNERS : WOMEN_QF_WINNERS;
+  const QF_SCORES  = bracketId==='bracket-men' ? MEN_QF_SCORES  : WOMEN_QF_SCORES;
+  const qf = Array(4).fill(0).map((_,i) => {
+    const qa=QF_SEEDS[i][0], qb=QF_SEEDS[i][1];
+    const w=QF_WINNERS[i]||null, sc=QF_SCORES[i]||null;
+    const bar = infoBar(QF_INFO[i].no, QF_INFO[i].time, QF_INFO[i].court);
+    const rA = w===qa?'win':w?'lose':'';
+    const rB = w===qb?'win':w?'lose':'';
+    const rowA = (qa&&S&&S[qa]) ? seedRow(S,qa,rA) : tbdRow();
+    const rowB = (qb&&S&&S[qb]) ? seedRow(S,qb,rB) : tbdRow();
+    const div = sc ? scoreDivider(sc) : '';
+    return `<div class="match">${bar}${rowA}${div}${rowB}</div>`;
+  });
+  const SF_INFO    = bracketId==='bracket-men' ? MEN_SF_INFO    : WOMEN_SF_INFO;
+  const SF_SEEDS   = bracketId==='bracket-men' ? MEN_SF_SEEDS   : WOMEN_SF_SEEDS;
+  const SF_WINNERS = bracketId==='bracket-men' ? MEN_SF_WINNERS : WOMEN_SF_WINNERS;
+  const SF_SCORES  = bracketId==='bracket-men' ? MEN_SF_SCORES  : WOMEN_SF_SCORES;
+  const sf = Array(2).fill(0).map((_,i) => {
+    const bar = infoBar(SF_INFO[i].no, SF_INFO[i].time, SF_INFO[i].court);
+    const sa=SF_SEEDS[i][0], sb=SF_SEEDS[i][1];
+    const w=SF_WINNERS[i]||null, sc=SF_SCORES[i]||null;
+    const rA = w===sa?'win':w?'lose':'';
+    const rB = w===sb?'win':w?'lose':'';
+    const rowA = (sa&&S&&S[sa]) ? seedRow(S,sa,rA) : tbdRow();
+    const rowB = (sb&&S&&S[sb]) ? seedRow(S,sb,rB) : tbdRow();
+    const div = sc ? scoreDivider(sc) : '';
+    return `<div class="match">${bar}${rowA}${div}${rowB}</div>`;
+  });
+  const FIN_INFO    = bracketId==='bracket-men' ? MEN_FIN_INFO    : WOMEN_FIN_INFO;
+  const FIN_SEEDS   = bracketId==='bracket-men' ? MEN_FIN_SEEDS   : WOMEN_FIN_SEEDS;
+  const FIN_WINNERS = bracketId==='bracket-men' ? MEN_FIN_WINNERS : WOMEN_FIN_WINNERS;
+  const FIN_SCORES  = bracketId==='bracket-men' ? MEN_FIN_SCORES  : WOMEN_FIN_SCORES;
+  const fin = [(() => {
+    const bar = infoBar(FIN_INFO[0].no, FIN_INFO[0].time, FIN_INFO[0].court);
+    const fa=FIN_SEEDS[0], fb=FIN_SEEDS[1];
+    const w=FIN_WINNERS[0]||null, sc=FIN_SCORES[0]||null;
+    const rA = w===fa?'win':w?'lose':'';
+    const rB = w===fb?'win':w?'lose':'';
+    const rowA = (fa&&S&&S[fa]) ? seedRow(S,fa,rA) : tbdRow();
+    const rowB = (fb&&S&&S[fb]) ? seedRow(S,fb,rB) : tbdRow();
+    const div = sc ? scoreDivider(sc) : '';
+    return `<div class="match">${bar}${rowA}${div}${rowB}</div>`;
+  })()];
+
+  const L1 = '1回戦<br><span class="date-sub">5/23</span>';
+  const L2 = '2回戦<br><span class="date-sub">5/24</span>';
+  const LQ = '準々決勝<br><span class="date-sub">5/30</span>';
+  const LS = '準決勝<br><span class="date-sub">5/31</span>';
+  const LF = '決勝<br><span class="date-sub">5/31</span>';
+
+  document.getElementById(bracketId).innerHTML =
+    round('r1',L1,r1) + divider('A'+bracketId) + conn('A'+bracketId) +
+    round('r2',L2,r2) + divider('B'+bracketId) + conn('B'+bracketId) +
+    round('qf',LQ,qf) + divider('C'+bracketId) + conn('C'+bracketId) +
+    round('sf',LS,sf) + conn('D'+bracketId) +
+    round('fin',LF,fin) + champCard();
+}
+
+buildBracket('bracket-men',   MEN,   MEN_SLOTS);
+buildBracket('bracket-women', WOMEN, WOMEN_SLOTS);
+
+// ===== DRAW CONNECTORS =====
+function drawBracket(bracketId) {
+  const br = document.getElementById(bracketId);
+  if (!br) return;
+  const bRect = br.getBoundingClientRect();
+  const totalH = br.scrollHeight;
+
+  function centers(cls){
+    return Array.from(br.querySelectorAll(`.${cls} .match`)).map(el=>{
+      const r=el.getBoundingClientRect();
+      return r.top + r.height/2 - bRect.top;
+    });
+  }
+
+  const c_r1=centers('r1'), c_r2=centers('r2'), c_qf=centers('qf'),
+        c_sf=centers('sf'), c_fin=centers('fin');
+
+  function draw(svgId, connId, src, dst, lineColor){
+    const connEl=document.getElementById(connId);
+    const svg=document.getElementById(svgId);
+    if(!connEl||!svg) return;
+    const w=connEl.getBoundingClientRect().width;
+    svg.setAttribute('width',w); svg.setAttribute('height',totalH);
+    const LINE=lineColor||'rgba(79,163,209,0.55)', SW=1.5;
+    let out='';
+    for(let i=0;i<dst.length;i++){
+      const y1=src[i*2],y2=src[i*2+1],yd=dst[i],xm=w/2;
+      out+=`<line x1="0" y1="${y1}" x2="${xm}" y2="${y1}" stroke="${LINE}" stroke-width="${SW}"/>`;
+      out+=`<line x1="0" y1="${y2}" x2="${xm}" y2="${y2}" stroke="${LINE}" stroke-width="${SW}"/>`;
+      out+=`<line x1="${xm}" y1="${y1}" x2="${xm}" y2="${y2}" stroke="${LINE}" stroke-width="${SW}"/>`;
+      out+=`<line x1="${xm}" y1="${yd}" x2="${w}" y2="${yd}" stroke="${LINE}" stroke-width="${SW}"/>`;
+    }
+    svg.innerHTML=out;
+  }
+
+  const isWomen = bracketId==='bracket-women';
+  const lineColor = isWomen ? 'rgba(233,30,140,0.55)' : 'rgba(79,163,209,0.55)';
+  draw('sA'+bracketId,'cA'+bracketId,c_r1,c_r2,lineColor);
+  draw('sB'+bracketId,'cB'+bracketId,c_r2,c_qf,lineColor);
+  draw('sC'+bracketId,'cC'+bracketId,c_qf,c_sf,lineColor);
+  draw('sD'+bracketId,'cD'+bracketId,c_sf,c_fin,lineColor);
+
+  // Divider heights
+  ['dA','dB','dC'].forEach(p=>{
+    const el=document.getElementById(p+bracketId);
+    if(el) el.style.height=totalH+50+'px';
+  });
+
+  // Champion alignment
+  const finEl=br.querySelectorAll('.fin .match')[0];
+  const champInner=br.querySelector('#champ-inner');
+  if(finEl&&champInner){
+    const fr=finEl.getBoundingClientRect();
+    const finCenter=fr.top+fr.height/2-bRect.top;
+    const cc=champInner.querySelector('.champ-card');
+    const ch=cc.getBoundingClientRect().height;
+    champInner.style.paddingTop=(finCenter-ch/2)+'px';
+    champInner.style.alignItems='flex-start';
+  }
+}
+
+document.fonts.ready.then(()=>requestAnimationFrame(()=>requestAnimationFrame(()=>{
+  updateChampion('men');
+  drawBracket('bracket-men');
+  drawBracket('bracket-women');
+})));
+</script>
+</body>
+</html>
