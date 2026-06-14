@@ -43,8 +43,7 @@ body{font-family:'Noto Sans JP',sans-serif;background:#0a1f35;min-height:100vh;c
 .rank-num{font-family:'Bebas Neue',cursive;font-weight:700;font-size:13px;color:var(--gray);}
 .pool-table tr.adv .rank-num{color:var(--sky);}
 .women-mode .pool-table tr.adv .rank-num{color:#F48FB1;}
-.jpn-pill{display:inline-block;font-size:8px;font-weight:700;color:#fff;background:rgba(26,92,138,0.9);border-radius:2px;padding:1px 4px;margin-right:3px;}
-.women-mode .jpn-pill{background:rgba(194,24,91,0.85);}
+.nat-pill{display:inline-block;font-size:8px;font-weight:700;color:#fff;background:rgba(80,80,80,0.85);border-radius:2px;padding:1px 4px;margin-right:3px;}
 .adv-badge{font-size:8px;font-weight:700;color:var(--sky);margin-left:4px;}
 .women-mode .adv-badge{color:#F48FB1;}
 .mr-list{display:flex;flex-direction:column;gap:4px;padding:10px 12px 12px;}
@@ -91,8 +90,6 @@ body{font-family:'Noto Sans JP',sans-serif;background:#0a1f35;min-height:100vh;c
 .team.winner{background:linear-gradient(90deg,#FFFAED,#FFF8E7);}.women-mode .team.winner{background:linear-gradient(90deg,#FFF0F7,#FFE4F0);}
 .team.loser .p1,.team.loser .p2{color:var(--gray);}
 .team.dim .p1,.team.dim .p2{color:var(--gray);}
-.jpn-hi .p1,.jpn-hi .p2{color:#1A5C8A;font-weight:700;}
-.women-mode .jpn-hi .p1,.women-mode .jpn-hi .p2{color:#C2185B;font-weight:700;}
 .sc-div{display:flex;align-items:center;justify-content:center;padding:2px 8px;background:#F5F7FA;border-top:1px solid var(--gray-l);border-bottom:1px solid var(--gray-l);gap:4px;flex-shrink:0;}
 .sc-s{font-size:11px;font-weight:700;color:var(--text);}.sc-p{font-size:9px;color:var(--gray);}
 .conn{width:28px;flex-shrink:0;position:relative;}.conn svg{position:absolute;top:0;left:0;width:28px;overflow:visible;}
@@ -159,13 +156,13 @@ const MEN_SEEDS={
   2:{p1:'石島 雄介',p2:'立谷 純太郎',jpn:true},
   3:{p1:'黒川 魁',p2:'安達 龍一',jpn:true},
   4:{p1:'マルキ ナシム',p2:'詫間 悠',jpn:true},
-  5:{p1:'Ben O\'Dea',p2:'James Sadlier',jpn:false},
+  5:{p1:'Ben O\'Dea',p2:'James Sadlier',jpn:false,nat:'NZL'},
   6:{p1:'黒澤 孝太',p2:'柏木 陸歩',jpn:true},
   7:{p1:'福嶋 晃介',p2:'関 寛之',jpn:true},
   8:{p1:'美保 幸輝',p2:'髙橋 大地',jpn:true},
   9:{p1:'富田 昂馬',p2:'佐藤 亮太',jpn:true},
   10:{p1:'伊藤 遼河',p2:'石川 瀬那',jpn:true},
-  11:{p1:'Martin Kaufer',p2:'上田 翔貴',jpn:false},
+  11:{p1:'Martin Kaufer',p2:'上田 翔貴',jpn:false,nat:'GER'},
   12:{p1:'溝端 拓真',p2:'西村 勇斗',jpn:true}
 };
 const WOMEN_SEEDS={
@@ -173,7 +170,7 @@ const WOMEN_SEEDS={
   2:{p1:'柴 麻美',p2:'村上 礼華',jpn:true},
   3:{p1:'酒井 春海',p2:'坪内 紫苑',jpn:true},
   4:{p1:'菊地 真結',p2:'森 愛唯',jpn:true},
-  5:{p1:'A. Gromadowska',p2:'A. Adamek',jpn:false},
+  5:{p1:'A. Gromadowska',p2:'A. Adamek',jpn:false,nat:'POL'},
   6:{p1:'樫原 美陽',p2:'沢目 繭',jpn:true},
   7:{p1:'中川 知香',p2:'秋重 若菜',jpn:true},
   8:{p1:'白幡 亜美',p2:'福田 鈴菜',jpn:true},
@@ -190,7 +187,7 @@ const MEN_POOLS=[
     {s:9,p1:'富田 昂馬',p2:'佐藤 亮太',jpn:true,rank:3}
   ],matches:[
     {no:'M#1',date:'6/12',a:1,b:9,w:1,sc:'2-0 (21-9,21-17)'},
-    {no:'M#2',date:'6/13',a:8,b:9,w:null,sc:''},
+    {no:'M#2',date:'6/13',a:8,b:9,w:8,sc:'2-0 (21-9,25-23)'},
     {no:'M#3',date:'6/12',a:1,b:8,w:1,sc:'2-0 (21-13,21-17)'}
   ]},
   {key:'B',teams:[
@@ -199,25 +196,25 @@ const MEN_POOLS=[
     {s:10,p1:'伊藤 遼河',p2:'石川 瀬那',jpn:true,rank:3}
   ],matches:[
     {no:'M#4',date:'6/12',a:2,b:10,w:2,sc:'2-0 (21-18,21-7)'},
-    {no:'M#5',date:'6/13',a:7,b:10,w:null,sc:''},
+    {no:'M#5',date:'6/13',a:7,b:10,w:7,sc:'2-0 (21-12,21-14)'},
     {no:'M#6',date:'6/12',a:2,b:7,w:2,sc:'2-0 (21-17,21-19)'}
   ]},
   {key:'C',teams:[
-    {s:3,p1:'黒川 魁',p2:'安達 龍一',jpn:true,rank:1},
-    {s:6,p1:'黒澤 孝太',p2:'柏木 陸歩',jpn:true,rank:2},
-    {s:11,p1:'Martin Kaufer',p2:'上田 翔貴',jpn:false,rank:3}
+    {s:11,p1:'Martin Kaufer',p2:'上田 翔貴',jpn:false,rank:1},
+    {s:3,p1:'黒川 魁',p2:'安達 龍一',jpn:true,rank:2},
+    {s:6,p1:'黒澤 孝太',p2:'柏木 陸歩',jpn:true,rank:3}
   ],matches:[
     {no:'M#7',date:'6/12',a:3,b:11,w:11,sc:'1-2 (20-22,27-25,13-15)'},
-    {no:'M#8',date:'6/13',a:6,b:11,w:null,sc:''},
+    {no:'M#8',date:'6/13',a:6,b:11,w:11,sc:'0-2 (17-21,19-21)'},
     {no:'M#9',date:'6/12',a:3,b:6,w:3,sc:'2-0 (21-19,21-10)'}
   ]},
   {key:'D',teams:[
-    {s:4,p1:'マルキ ナシム',p2:'詫間 悠',jpn:true,rank:1},
-    {s:5,p1:'Ben O\'Dea',p2:'James Sadlier',jpn:false,rank:2},
+    {s:5,p1:'Ben O\'Dea',p2:'James Sadlier',jpn:false,rank:1},
+    {s:4,p1:'マルキ ナシム',p2:'詫間 悠',jpn:true,rank:2},
     {s:12,p1:'溝端 拓真',p2:'西村 勇斗',jpn:true,rank:3}
   ],matches:[
     {no:'M#10',date:'6/12',a:4,b:12,w:4,sc:'2-0 (21-9,21-16)'},
-    {no:'M#11',date:'6/13',a:5,b:12,w:null,sc:''},
+    {no:'M#11',date:'6/13',a:5,b:12,w:5,sc:'2-0 (21-19,21-15)'},
     {no:'M#12',date:'6/12',a:4,b:5,w:5,sc:'1-2 (19-21,21-19,13-15)'}
   ]}
 ];
@@ -228,7 +225,7 @@ const WOMEN_POOLS=[
     {s:9,p1:'本村 嘉菜',p2:'本村 成優',jpn:true,rank:3}
   ],matches:[
     {no:'W#1',date:'6/12',a:1,b:9,w:1,sc:'2-0 (21-16,21-17)'},
-    {no:'W#2',date:'6/13',a:8,b:9,w:null,sc:''},
+    {no:'W#2',date:'6/13',a:8,b:9,w:8,sc:'2-0 (21-13,21-15)'},
     {no:'W#3',date:'6/12',a:1,b:8,w:1,sc:'2-0 (21-18,21-18)'}
   ]},
   {key:'B',teams:[
@@ -237,25 +234,25 @@ const WOMEN_POOLS=[
     {s:10,p1:'藤井 桜子',p2:'藪見 真歩',jpn:true,rank:3}
   ],matches:[
     {no:'W#4',date:'6/12',a:2,b:10,w:2,sc:'2-0 (21-15,22-20)'},
-    {no:'W#5',date:'6/13',a:7,b:10,w:null,sc:''},
+    {no:'W#5',date:'6/13',a:7,b:10,w:7,sc:'2-1 (18-21,21-12,18-16)'},
     {no:'W#6',date:'6/12',a:2,b:7,w:2,sc:'2-0 (21-15,21-19)'}
   ]},
   {key:'C',teams:[
-    {s:3,p1:'酒井 春海',p2:'坪内 紫苑',jpn:true,rank:1},
-    {s:6,p1:'樫原 美陽',p2:'沢目 繭',jpn:true,rank:2},
-    {s:11,p1:'溝江 明香',p2:'宇都木 乃愛',jpn:true,rank:3}
+    {s:6,p1:'樫原 美陽',p2:'沢目 繭',jpn:true,rank:1},
+    {s:11,p1:'溝江 明香',p2:'宇都木 乃愛',jpn:true,rank:2},
+    {s:3,p1:'酒井 春海',p2:'坪内 紫苑',jpn:true,rank:3}
   ],matches:[
     {no:'W#7',date:'6/12',a:3,b:11,w:3,sc:'2-1 (27-25,19-21,15-12)'},
-    {no:'W#8',date:'6/13',a:6,b:11,w:null,sc:''},
+    {no:'W#8',date:'6/13',a:6,b:11,w:11,sc:'1-2 (28-26,17-21,13-15)'},
     {no:'W#9',date:'6/12',a:3,b:6,w:6,sc:'0-2 (12-21,7-21)'}
   ]},
   {key:'D',teams:[
     {s:4,p1:'菊地 真結',p2:'森 愛唯',jpn:true,rank:1},
     {s:12,p1:'辻村 りこ',p2:'西堀 健実',jpn:true,rank:2},
-    {s:5,p1:'A. Gromadowska',p2:'A. Adamek',jpn:false,rank:3}
+    {s:5,p1:'A. Gromadowska',p2:'A. Adamek',jpn:false,nat:'POL',rank:3}
   ],matches:[
     {no:'W#10',date:'6/12',a:4,b:12,w:12,sc:'0-2 (19-21,15-21)'},
-    {no:'W#11',date:'6/13',a:5,b:12,w:null,sc:''},
+    {no:'W#11',date:'6/13',a:5,b:12,w:5,sc:'2-0 (23-21,27-25)'},
     {no:'W#12',date:'6/12',a:4,b:5,w:4,sc:'2-0 (21-13,21-11)'}
   ]}
 ];
@@ -277,16 +274,15 @@ function buildPoolHTML(pools,seeds){
     html+=`<table class="pool-table"><thead><tr><th>#</th><th>チーム</th><th>勝</th><th>負</th></tr></thead><tbody>`;
     const sorted=[...pool.teams].sort((a,b)=>a.rank-b.rank);
     sorted.forEach((t,i)=>{
-      const jpnPill=t.jpn?'<span class="jpn-pill">JPN</span>':'';
+      const jpnPill=(!t.jpn&&t.nat)?'<span class="nat-pill">'+t.nat+'</span>':'';
       let wins=0,losses=0;
       pool.matches.forEach(m=>{
         if((m.a===t.s||m.b===t.s)&&m.w!==null&&m.w!==undefined){
           if(m.w===t.s) wins++; else losses++;
         }
       });
-      const confirmed=wins>=2;
-      const adv=confirmed?'adv':'';
-      const advBadge=confirmed?'<span class="adv-badge">▶QF</span>':'';
+      const adv=(i===0||i===1)?'adv':'';
+      const advBadge=(i===0||i===1)?'<span class="adv-badge">▶QF</span>':'';
       html+=`<tr class="${adv}"><td class="rank-num">${i+1}</td><td>${jpnPill}${t.p1} / ${t.p2}${advBadge}</td><td>${wins}</td><td>${losses}</td></tr>`;
     });
     html+='</tbody></table>';
@@ -296,8 +292,8 @@ function buildPoolHTML(pools,seeds){
       const tb=sorted.find(t=>t.s===m.b)||{p1:'TBD',p2:'',jpn:false};
       const ra=m.w===m.a?'winner':m.w?'loser':'';
       const rb=m.w===m.b?'winner':m.w?'loser':'';
-      const jpnA=ta.jpn?'<span class="jpn-pill">JPN</span>':'';
-      const jpnB=tb.jpn?'<span class="jpn-pill">JPN</span>':'';
+      const jpnA=(!ta.jpn&&ta.nat)?'<span class="nat-pill">'+ta.nat+'</span>':'';
+      const jpnB=(!tb.jpn&&tb.nat)?'<span class="nat-pill">'+tb.nat+'</span>':'';
       html+=`<div class="mr-row">
         <span class="mr-no">${m.no}</span>
         <span class="mr-date">${m.date}</span>
@@ -320,8 +316,7 @@ function sRow(seeds,s,result){
   if(!s||!seeds[s]) return `<div class="team dim"><div class="team-top"><span class="badge tbd">?</span><span class="p1">TBD</span></div><div class="p2">-</div></div>`;
   const d=seeds[s];
   const cls=result==='win'?' winner':result==='lose'?' loser':'';
-  const jcls=d.jpn?' jpn-hi':'';
-  return `<div class="team${cls}${jcls}"><div class="team-top"><span class="badge">${s}</span><span class="p1">${d.p1}</span></div><div class="p2">${d.p2}</div></div>`;
+  const natBadge=(!d.jpn&&d.nat)?`<span class="nat-pill">${d.nat}</span>`:'';  return `<div class="team${cls}"><div class="team-top"><span class="badge">${s}</span><span class="p1">${d.p1}</span></div><div class="p2">${natBadge}${d.p2}</div></div>`;
 }
 function mCard(no,time,court,seeds,sa,sb,w,sc){
   const rA=w===sa?'win':w?'lose':'', rB=w===sb?'win':w?'lose':'';
@@ -364,10 +359,41 @@ function buildBracket(bracketId){
   const finNo=isMen?'M#19':'W#19';
   const finTime=isMen?'14:00':'14:50';
 
-  const qfCards=qfInfo.map(q=>tbdM(q.no,q.time,q.court));
-  const sfCards=[tbdM(sfNos[0],isMen?'9:00':'11:00','C1'),tbdM(sfNos[1],isMen?'10:00':'12:00','C1')];
-  const finCard=tbdM(finNo,finTime,'C1');
-  const champW=`<div class="champ-wrap" id="cw-${g}"><div class="round-label" style="opacity:0">-</div><div style="display:flex;align-items:center;" id="ci-${g}"><div class="champ-card"><div style="font-size:26px;margin-bottom:4px;">🏆</div><div style="font-family:'Bebas Neue',cursive;font-size:11px;letter-spacing:3px;opacity:0.85;margin-bottom:4px;">CHAMPION</div><div style="font-size:11px;font-weight:700;">6/14 決定</div></div></div></div>`;
+  // QF data
+  const MQF=[
+    {no:'M#13',time:'13:00',court:'C1',sa:1, sb:4, w:4, sc:'0-2 (9-21,12-21)'},
+    {no:'M#14',time:'13:00',court:'C2',sa:7, sb:5, w:5, sc:'0-2 (15-21,13-21)'},
+    {no:'M#15',time:'14:00',court:'C2',sa:11,sb:8, w:11,sc:'2-0 (21-15,21-18)'},
+    {no:'M#16',time:'14:00',court:'C1',sa:3, sb:2, w:2, sc:'0-2 (10-21,21-23)'}
+  ];
+  const WQF=[
+    {no:'W#13',time:'15:00',court:'C1',sa:1, sb:12,w:1, sc:'2-1 (17-21,22-20,15-6)'},
+    {no:'W#14',time:'15:00',court:'C2',sa:11,sb:4, w:4, sc:'0-2 (17-21,11-21)'},
+    {no:'W#15',time:'16:00',court:'C2',sa:6, sb:7, w:6, sc:'2-0 (21-19,21-16)'},
+    {no:'W#16',time:'16:00',court:'C1',sa:8, sb:2, w:2, sc:'0-2 (14-21,9-21)'}
+  ];
+  // SF data
+  const MSF=[
+    {no:'M#17',time:'9:00', court:'C1',sa:4, sb:5, w:4, sc:'2-1 (21-14,20-22,15-11)'},
+    {no:'M#18',time:'10:00',court:'C1',sa:11,sb:2, w:11,sc:'2-0 (30-28,21-19)'}
+  ];
+  const WSF=[
+    {no:'W#17',time:'11:00',court:'C1',sa:1, sb:4, w:1, sc:'2-0 (21-6,21-18)'},
+    {no:'W#18',time:'12:00',court:'C1',sa:6, sb:2, w:2, sc:'0-2 (11-21,13-21)'}
+  ];
+
+  const qfData=isMen?MQF:WQF;
+  const sfData=isMen?MSF:WSF;
+  const qfCards=qfData.map(q=>mCard(q.no,q.time,q.court,seeds,q.sa,q.sb,q.w,q.sc));
+  const sfCards=sfData.map(s=>mCard(s.no,s.time,s.court,seeds,s.sa,s.sb,s.w,s.sc));
+  const finData=isMen?
+    {sa:4, sb:11, w:4, sc:'2-1 (21-19,18-21,15-6)'}:
+    {sa:1, sb:2,  w:2, sc:'1-2 (21-14,15-21,13-15)'};
+  const finCard=mCard(finNo,finTime,'C1',seeds,finData.sa,finData.sb,finData.w,finData.sc);
+  const champNames=isMen?
+    ['マルキ ナシム','詫間 悠']:
+    ['柴 麻美','村上 礼華'];
+  const champW=`<div class="champ-wrap" id="cw-${g}"><div class="round-label" style="opacity:0">-</div><div style="display:flex;align-items:center;" id="ci-${g}"><div class="champ-card"><div style="font-size:26px;margin-bottom:4px;">🏆</div><div style="font-family:'Bebas Neue',cursive;font-size:11px;letter-spacing:3px;opacity:0.85;margin-bottom:6px;">CHAMPION</div><div style="font-size:11px;font-weight:700;line-height:1.6;">${champNames[0]}<br>${champNames[1]}</div></div></div></div>`;
 
   document.getElementById(bracketId).innerHTML=
     rnd('qf','準々決勝','6/14(日)',qfCards)+div_('A'+bracketId)+conn('A'+bracketId)+
