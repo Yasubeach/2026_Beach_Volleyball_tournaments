@@ -42,8 +42,8 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);min-height:100vh;color
 .pool-table tr.adv td{color:#fff;}
 .rank-num{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;color:var(--gray);}
 .pool-table tr.adv .rank-num{color:var(--teal);}
-.nat-pill{display:inline-block;font-size:8px;font-weight:700;color:#fff;background:rgba(80,80,80,0.85);border-radius:2px;padding:1px 4px;margin-right:3px;}
-.jpn-pill{display:inline-block;font-size:8px;font-weight:700;color:#fff;background:rgba(46,196,182,0.85);border-radius:2px;padding:1px 4px;margin-right:3px;}
+.nat-pill{display:inline-block;font-size:8px;font-weight:700;color:#fff;background:rgba(80,80,80,0.85);border-radius:2px;padding:1px 4px;min-width:26px;text-align:center;flex-shrink:0;}
+.jpn-pill{display:inline-block;font-size:8px;font-weight:700;color:#fff;background:rgba(46,196,182,0.85);border-radius:2px;padding:1px 4px;min-width:26px;text-align:center;flex-shrink:0;}
 .women-mode .jpn-pill{background:rgba(155,61,175,0.85);}
 .adv-badge{font-size:8px;font-weight:700;color:var(--teal);margin-left:4px;}
 .women-mode .adv-badge{color:#C86DD7;}
@@ -93,10 +93,12 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);min-height:100vh;color
 .team{flex:1;display:flex;flex-direction:column;justify-content:center;padding:3px 8px;border-bottom:1px solid var(--gray-light);}
 .team:last-child{border-bottom:none;}
 .team-top{display:flex;align-items:center;gap:4px;}
-.badge{font-size:8px;font-weight:700;color:#fff;background:var(--teal-dark);border-radius:3px;padding:1px 4px;flex-shrink:0;}
+.badge{font-size:8px;font-weight:700;color:#fff;background:var(--teal-dark);border-radius:3px;padding:1px 4px;flex-shrink:0;min-width:26px;text-align:center;}
 .badge.tbd{background:#bbb;}
 .p1{font-size:11px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;}
-.p2{font-size:10px;color:#555;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-left:20px;margin-top:1px;}
+.p2{display:flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:#555;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-left:0;margin-top:1px;}
+.p2-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.p2-badge-wrap{flex-shrink:0;min-width:26px;}
 .team.winner{background:linear-gradient(90deg,#E8F9F8,#D4F5F2);}
 .team.loser .p1,.team.loser .p2{color:var(--gray);}
 .team.dim .p1,.team.dim .p2{color:var(--gray);}
@@ -170,7 +172,7 @@ const M_POOLS=[
   ],matches:[
     {no:'M1',date:'6/18',local:'09:00',court:'CC',a:'M-A1',b:'M-A3',w:'M-A1',sc:'2-0 (21-8,21-7)'},
     {no:'M9',date:'6/18',local:'15:50',court:'2',a:'M-A2',b:'M-A3',w:'M-A2',sc:'2-0 (21-4,21-11)'},
-    {no:'M17',date:'6/19',local:'10:40',court:'CC',a:'M-A1',b:'M-A2',w:null,sc:''}
+    {no:'M17',date:'6/19',local:'10:40',court:'CC',a:'M-A1',b:'M-A2',w:'M-A1',sc:'2-0 (21-18,21-11)'}
   ]},
   {key:'B',teams:[
     {id:'M-B1',p1:'Potts',p2:'Pearse',nat:'AUS',jpn:false,seed:2,rank:1},
@@ -179,7 +181,7 @@ const M_POOLS=[
   ],matches:[
     {no:'M2',date:'6/18',local:'09:00',court:'2',a:'M-B1',b:'M-B3',w:'M-B1',sc:'2-1 (21-15,16-21,15-11)'},
     {no:'M10',date:'6/18',local:'15:50',court:'CC',a:'M-B2',b:'M-B3',w:'M-B3',sc:'0-2 (16-21,17-21)'},
-    {no:'M18',date:'6/19',local:'10:40',court:'2',a:'M-B1',b:'M-B2',w:null,sc:''}
+    {no:'M18',date:'6/19',local:'10:40',court:'2',a:'M-B1',b:'M-B2',w:'M-B1',sc:'2-0 (21-19,21-15)'}
   ]},
   {key:'C',teams:[
     {id:'M-C1',p1:'Nicolaidis',p2:'Carracher',nat:'AUS',jpn:false,seed:3,rank:1},
@@ -188,7 +190,7 @@ const M_POOLS=[
   ],matches:[
     {no:'M3',date:'6/18',local:'09:00',court:'3',a:'M-C1',b:'M-C3',w:'M-C1',sc:'2-0 (21-7,21-11)'},
     {no:'M11',date:'6/18',local:'15:50',court:'3',a:'M-C2',b:'M-C3',w:'M-C2',sc:'2-0 (21-10,21-12)'},
-    {no:'M19',date:'6/19',local:'10:40',court:'3',a:'M-C1',b:'M-C2',w:null,sc:''}
+    {no:'M19',date:'6/19',local:'10:40',court:'3',a:'M-C1',b:'M-C2',w:'M-C1',sc:'2-0 (21-15,21-12)'}
   ]},
   {key:'D',teams:[
     {id:'M-D1',p1:'Takahashi Takumi',p2:'Ikeda Jumpei',nat:'JPN',jpn:true,seed:4,rank:1},
@@ -197,7 +199,7 @@ const M_POOLS=[
   ],matches:[
     {no:'M4',date:'6/18',local:'09:50',court:'3',a:'M-D1',b:'M-D3',w:'M-D1',sc:'2-0 (21-15,21-7)'},
     {no:'M12',date:'6/18',local:'16:40',court:'2',a:'M-D2',b:'M-D3',w:'M-D2',sc:'2-0 (21-18,21-16)'},
-    {no:'M20',date:'6/19',local:'11:30',court:'2',a:'M-D1',b:'M-D2',w:null,sc:''}
+    {no:'M20',date:'6/19',local:'11:30',court:'2',a:'M-D1',b:'M-D2',w:'M-D1',sc:'2-1 (21-15,20-22,16-14)'}
   ]},
   {key:'E',teams:[
     {id:'M-E1',p1:'Kurokawa Kai',p2:'Adachi Ryuichi',nat:'JPN',jpn:true,seed:5,rank:2},
@@ -206,16 +208,16 @@ const M_POOLS=[
   ],matches:[
     {no:'M5',date:'6/18',local:'09:50',court:'2',a:'M-E1',b:'M-E3',w:'M-E3',sc:'1-2 (21-15,16-21,18-20)'},
     {no:'M13',date:'6/18',local:'16:40',court:'CC',a:'M-E2',b:'M-E3',w:'M-E3',sc:'0-2 (14-21,16-21)'},
-    {no:'M21',date:'6/19',local:'11:30',court:'3',a:'M-E1',b:'M-E2',w:null,sc:''}
+    {no:'M21',date:'6/19',local:'11:30',court:'3',a:'M-E1',b:'M-E2',w:'M-E1',sc:'2-0 (21-11,21-10)'}
   ]},
   {key:'F',teams:[
-    {id:'M-F1',p1:'Wu Jiaxin',p2:'Ch.W.Zhou',nat:'CHN',jpn:false,seed:6,rank:1},
-    {id:'M-F2',p1:'Netitorn',p2:'T.Poravid',nat:'THA',jpn:false,seed:11,rank:2},
+    {id:'M-F1',p1:'Wu Jiaxin',p2:'Ch.W.Zhou',nat:'CHN',jpn:false,seed:6,rank:2},
+    {id:'M-F2',p1:'Netitorn',p2:'T.Poravid',nat:'THA',jpn:false,seed:11,rank:1},
     {id:'M-F3',p1:'Nguyen Lam Toi',p2:'T.V.Viet',nat:'VIE',jpn:false,seed:19,rank:3}
   ],matches:[
     {no:'M6',date:'6/18',local:'09:50',court:'CC',a:'M-F1',b:'M-F3',w:'M-F1',sc:'2-0 (21-16,21-17)'},
     {no:'M14',date:'6/18',local:'17:30',court:'CC',a:'M-F2',b:'M-F3',w:'M-F2',sc:'2-0 (21-16,21-18)'},
-    {no:'M22',date:'6/19',local:'11:30',court:'CC',a:'M-F1',b:'M-F2',w:null,sc:''}
+    {no:'M22',date:'6/19',local:'11:30',court:'CC',a:'M-F1',b:'M-F2',w:'M-F2',sc:'1-2 (15-21,21-19,14-16)'}
   ]},
   {key:'G',teams:[
     {id:'M-G1',p1:'Sadlier',p2:"O'Dea B.",nat:'NZL',jpn:false,seed:7,rank:3},
@@ -224,16 +226,16 @@ const M_POOLS=[
   ],matches:[
     {no:'M7',date:'6/18',local:'10:40',court:'CC',a:'M-G1',b:'M-G3',w:'M-G3',sc:'0-2 (16-21,19-21)'},
     {no:'M15',date:'6/18',local:'20:00',court:'CC',a:'M-G2',b:'M-G3',w:'M-G3',sc:'1-2 (17-21,21-13,11-15)'},
-    {no:'M23',date:'6/19',local:'15:00',court:'CC',a:'M-G1',b:'M-G2',w:null,sc:''}
+    {no:'M23',date:'6/19',local:'15:00',court:'CC',a:'M-G1',b:'M-G2',w:'M-G2',sc:'0-2 (Injury)'}
   ]},
   {key:'H',teams:[
-    {id:'M-H1',p1:'M.Wachirawit',p2:'T.Pithak',nat:'THA',jpn:false,seed:8,rank:1},
-    {id:'M-H2',p1:'Bogatu',p2:'Gurin',nat:'KAZ',jpn:false,seed:9,rank:2},
+    {id:'M-H1',p1:'M.Wachirawit',p2:'T.Pithak',nat:'THA',jpn:false,seed:8,rank:2},
+    {id:'M-H2',p1:'Bogatu',p2:'Gurin',nat:'KAZ',jpn:false,seed:9,rank:1},
     {id:'M-H3',p1:'M.Alkeer',p2:'M.Ihab',nat:'QAT',jpn:false,seed:17,rank:3}
   ],matches:[
     {no:'M8',date:'6/18',local:'10:40',court:'2',a:'M-H1',b:'M-H3',w:'M-H1',sc:'2-0 (21-13,21-17)'},
     {no:'M16',date:'6/18',local:'17:30',court:'2',a:'M-H2',b:'M-H3',w:'M-H2',sc:'2-1 (21-14,21-23,15-12)'},
-    {no:'M24',date:'6/19',local:'15:00',court:'2',a:'M-H1',b:'M-H2',w:null,sc:''}
+    {no:'M24',date:'6/19',local:'15:00',court:'2',a:'M-H1',b:'M-H2',w:'M-H2',sc:'0-2 (16-21,19-21)'}
   ]}
 ];
 
@@ -242,67 +244,67 @@ const W_POOLS=[
     {id:'W-A1',p1:'Yan X.',p2:'X.Y.Xia',nat:'CHN',jpn:false,seed:1,rank:1},
     {id:'W-A2',p1:'N.L.Tsang',p2:'M.C.Wong',nat:'HKG',jpn:false,seed:16,rank:2}
   ],matches:[
-    {no:'W17',date:'6/19',local:'20:30',court:'CC',a:'W-A1',b:'W-A2',w:null,sc:''}
+    {no:'W17',date:'6/19',local:'20:30',court:'CC',a:'W-A1',b:'W-A2',w:'W-A1',sc:'2-0 (21-11,21-11)'}
   ]},
   {key:'B',teams:[
     {id:'W-B1',p1:'Shiba Asami',p2:'Murakami Reika',nat:'JPN',jpn:true,seed:2,rank:1},
     {id:'W-B2',p1:'Hinton',p2:'Green',nat:'NZL',jpn:false,seed:15,rank:2}
   ],matches:[
-    {no:'W18',date:'6/19',local:'16:40',court:'3',a:'W-B1',b:'W-B2',w:null,sc:''}
+    {no:'W18',date:'6/19',local:'16:40',court:'3',a:'W-B1',b:'W-B2',w:'W-B1',sc:'2-0 (21-16,21-13)'}
   ]},
   {key:'C',teams:[
     {id:'W-C1',p1:'Fleming',p2:'Alchin',nat:'AUS',jpn:false,seed:3,rank:1},
-    {id:'W-C2',p1:'S.Patcharaporn',p2:'S.Samitta',nat:'THA',jpn:false,seed:14,rank:3},
-    {id:'W-C3',p1:'Grace',p2:'Tan Q.Y.',nat:'SGP',jpn:false,seed:22,rank:2}
+    {id:'W-C2',p1:'S.Patcharaporn',p2:'S.Samitta',nat:'THA',jpn:false,seed:14,rank:2},
+    {id:'W-C3',p1:'Grace',p2:'Tan Q.Y.',nat:'SGP',jpn:false,seed:22,rank:3}
   ],matches:[
     {no:'W3',date:'6/18',local:'15:00',court:'3',a:'W-C1',b:'W-C3',w:'W-C1',sc:'2-0 (21-10,21-9)'},
-    {no:'W11',date:'6/19',local:'09:00',court:'3',a:'W-C2',b:'W-C3',w:null,sc:''},
-    {no:'W19',date:'6/19',local:'15:50',court:'2',a:'W-C1',b:'W-C2',w:null,sc:''}
+    {no:'W11',date:'6/19',local:'09:00',court:'3',a:'W-C2',b:'W-C3',w:'W-C2',sc:'2-0 (21-10,21-8)'},
+    {no:'W19',date:'6/19',local:'15:50',court:'2',a:'W-C1',b:'W-C2',w:'W-C1',sc:'2-0 (21-15,21-16)'}
   ]},
   {key:'D',teams:[
     {id:'W-D1',p1:'Clancy',p2:'Fejes',nat:'AUS',jpn:false,seed:4,rank:1},
-    {id:'W-D2',p1:'Rawle',p2:'Tiplady',nat:'NZL',jpn:false,seed:13,rank:3},
-    {id:'W-D3',p1:'Sing Yee',p2:'TAI',nat:'MAS',jpn:false,seed:21,rank:2}
+    {id:'W-D2',p1:'Rawle',p2:'Tiplady',nat:'NZL',jpn:false,seed:13,rank:2},
+    {id:'W-D3',p1:'Sing Yee',p2:'TAI',nat:'MAS',jpn:false,seed:21,rank:3}
   ],matches:[
     {no:'W4',date:'6/18',local:'11:30',court:'3',a:'W-D1',b:'W-D3',w:'W-D1',sc:'2-0 (21-7,21-6)'},
-    {no:'W12',date:'6/19',local:'09:00',court:'CC',a:'W-D2',b:'W-D3',w:null,sc:''},
-    {no:'W20',date:'6/19',local:'16:40',court:'2',a:'W-D1',b:'W-D2',w:null,sc:''}
+    {no:'W12',date:'6/19',local:'09:00',court:'CC',a:'W-D2',b:'W-D3',w:'W-D2',sc:'2-0 (21-15,21-9)'},
+    {no:'W20',date:'6/19',local:'16:40',court:'2',a:'W-D1',b:'W-D2',w:'W-D1',sc:'2-0 (21-13,21-9)'}
   ]},
   {key:'E',teams:[
-    {id:'W-E1',p1:'Matsumoto Ren',p2:'Matsumoto Non',nat:'JPN',jpn:true,seed:5,rank:1},
-    {id:'W-E2',p1:'Naraphornrapat',p2:'Worapeerachayakorn',nat:'THA',jpn:false,seed:12,rank:3},
-    {id:'W-E3',p1:'D.T.M.Nga',p2:'Thach Thi Thuy',nat:'VIE',jpn:false,seed:20,rank:2}
+    {id:'W-E1',p1:'Matsumoto Ren',p2:'Matsumoto Non',nat:'JPN',jpn:true,seed:5,rank:2},
+    {id:'W-E2',p1:'Naraphornrapat',p2:'Worapeerachayakorn',nat:'THA',jpn:false,seed:12,rank:1},
+    {id:'W-E3',p1:'D.T.M.Nga',p2:'Thach Thi Thuy',nat:'VIE',jpn:false,seed:20,rank:3}
   ],matches:[
     {no:'W5',date:'6/18',local:'11:30',court:'2',a:'W-E1',b:'W-E3',w:'W-E1',sc:'2-0 (21-13,21-19)'},
-    {no:'W13',date:'6/19',local:'09:00',court:'2',a:'W-E2',b:'W-E3',w:null,sc:''},
-    {no:'W21',date:'6/19',local:'15:50',court:'3',a:'W-E1',b:'W-E2',w:null,sc:''}
+    {no:'W13',date:'6/19',local:'09:00',court:'2',a:'W-E2',b:'W-E3',w:'W-E2',sc:'2-0 (21-10,21-8)'},
+    {no:'W21',date:'6/19',local:'15:50',court:'3',a:'W-E1',b:'W-E2',w:'W-E2',sc:'0-2 (16-21,28-30)'}
   ]},
   {key:'F',teams:[
     {id:'W-F1',p1:'Jiang K.Y.',p2:'Zhou M.L.',nat:'CHN',jpn:false,seed:6,rank:1},
-    {id:'W-F2',p1:'Lawac',p2:'Toko',nat:'VAN',jpn:false,seed:11,rank:3},
-    {id:'W-F3',p1:'Lee X.E.V',p2:'Ang H.Y',nat:'SGP',jpn:false,seed:19,rank:2}
+    {id:'W-F2',p1:'Lawac',p2:'Toko',nat:'VAN',jpn:false,seed:11,rank:2},
+    {id:'W-F3',p1:'Lee X.E.V',p2:'Ang H.Y',nat:'SGP',jpn:false,seed:19,rank:3}
   ],matches:[
     {no:'W6',date:'6/18',local:'11:30',court:'CC',a:'W-F1',b:'W-F3',w:'W-F1',sc:'2-0 (21-12,21-11)'},
-    {no:'W14',date:'6/19',local:'09:50',court:'3',a:'W-F2',b:'W-F3',w:null,sc:''},
-    {no:'W22',date:'6/19',local:'19:30',court:'CC',a:'W-F1',b:'W-F2',w:null,sc:''}
+    {no:'W14',date:'6/19',local:'09:50',court:'3',a:'W-F2',b:'W-F3',w:'W-F2',sc:'2-0 (21-15,21-14)'},
+    {no:'W22',date:'6/19',local:'19:30',court:'CC',a:'W-F1',b:'W-F2',w:'W-F1',sc:'2-0 (21-12,21-16)'}
   ]},
   {key:'G',teams:[
-    {id:'W-G1',p1:'Milutinovic',p2:'Rayner',nat:'AUS',jpn:false,seed:7,rank:1},
-    {id:'W-G2',p1:'Kadeliye',p2:'Aheidan',nat:'CHN',jpn:false,seed:10,rank:3},
-    {id:'W-G3',p1:'W.T.To',p2:'W.M.To',nat:'HKG',jpn:false,seed:18,rank:2}
+    {id:'W-G1',p1:'Milutinovic',p2:'Rayner',nat:'AUS',jpn:false,seed:7,rank:2},
+    {id:'W-G2',p1:'Kadeliye',p2:'Aheidan',nat:'CHN',jpn:false,seed:10,rank:1},
+    {id:'W-G3',p1:'W.T.To',p2:'W.M.To',nat:'HKG',jpn:false,seed:18,rank:3}
   ],matches:[
     {no:'W7',date:'6/18',local:'15:00',court:'2',a:'W-G1',b:'W-G3',w:'W-G1',sc:'2-0 (21-17,21-19)'},
-    {no:'W15',date:'6/19',local:'09:50',court:'CC',a:'W-G2',b:'W-G3',w:null,sc:''},
-    {no:'W23',date:'6/19',local:'16:40',court:'CC',a:'W-G1',b:'W-G2',w:null,sc:''}
+    {no:'W15',date:'6/19',local:'09:50',court:'CC',a:'W-G2',b:'W-G3',w:'W-G2',sc:'2-1 (25-27,21-13,17-15)'},
+    {no:'W23',date:'6/19',local:'16:40',court:'CC',a:'W-G1',b:'W-G2',w:'W-G2',sc:'1-2 (21-18,13-21,11-15)'}
   ]},
   {key:'H',teams:[
     {id:'W-H1',p1:'Sh.T.Cao',p2:'J.Dong',nat:'CHN',jpn:false,seed:8,rank:1},
-    {id:'W-H2',p1:'Ito Sakura',p2:'Ishii Miki',nat:'JPN',jpn:true,seed:9,rank:3},
-    {id:'W-H3',p1:'C.N.Lan',p2:'M.H.Hanh',nat:'VIE',jpn:false,seed:17,rank:2}
+    {id:'W-H2',p1:'Ito Sakura',p2:'Ishii Miki',nat:'JPN',jpn:true,seed:9,rank:2},
+    {id:'W-H3',p1:'C.N.Lan',p2:'M.H.Hanh',nat:'VIE',jpn:false,seed:17,rank:3}
   ],matches:[
     {no:'W8',date:'6/18',local:'15:00',court:'CC',a:'W-H1',b:'W-H3',w:'W-H1',sc:'2-0 (21-14,21-15)'},
-    {no:'W16',date:'6/19',local:'09:50',court:'2',a:'W-H2',b:'W-H3',w:null,sc:''},
-    {no:'W24',date:'6/19',local:'15:50',court:'CC',a:'W-H1',b:'W-H2',w:null,sc:''}
+    {no:'W16',date:'6/19',local:'09:50',court:'2',a:'W-H2',b:'W-H3',w:'W-H2',sc:'2-0 (21-14,21-11)'},
+    {no:'W24',date:'6/19',local:'15:50',court:'CC',a:'W-H1',b:'W-H2',w:'W-H1',sc:'2-0 (24-22,22-20)'}
   ]}
 ];
 
@@ -319,9 +321,8 @@ function buildPoolHTML(pools){
       const jpnCls=t.jpn?' jpn-hi':'';
       let w=0,l=0;
       pool.matches.forEach(m=>{if((m.a===t.id||m.b===t.id)&&m.w){if(m.w===t.id)w++;else l++;}});
-      const confirmed=w>=2;
-      const adv=confirmed?'adv':'';
-      const advBadge=confirmed?'<span class="adv-badge">&#9654;MD</span>':'';
+      const adv=(i===0||i===1)?'adv':'';
+      const advBadge=(i===0||i===1)?'<span class="adv-badge">&#9654;MD</span>':'';
       const natBadge=t.jpn?`<span class="jpn-pill">JPN</span>`:`<span class="nat-pill">${t.nat}</span>`;
       html+=`<tr class="${adv}"><td class="rank-num">${i+1}</td><td class="${jpnCls}">${t.p1} / ${t.p2}${advBadge}</td><td>${natBadge}</td><td>${w}</td><td>${l}</td></tr>`;
     });
@@ -361,7 +362,7 @@ function teamRow(t,result){
   const cls=result==='win'?' winner':result==='lose'?' loser':'';
   const jpnCls=t.jpn?' jpn-hi':'';
   const natBadgeT=t.jpn?`<span class="jpn-pill">JPN</span>`:`<span class="nat-pill">${t.nat}</span>`;
-  return `<div class="team${cls}${jpnCls}"><div class="team-top"><span class="badge">${t.seed}</span><span class="p1">${t.p1}</span></div><div class="p2">${natBadgeT}${t.p2}</div></div>`;
+  return `<div class="team${cls}${jpnCls}"><div class="team-top"><span class="badge">${t.seed}</span><span class="p1">${t.p1}</span></div><div class="p2">${natBadgeT}<span class="p2-name">${t.p2}</span></div></div>`;
 }
 function matchCard(no,local,court,ta,tb,w,sc){
   const ra=w&&ta&&w===ta.id?'win':w?'lose':'';
@@ -380,8 +381,30 @@ function rnd(cls,label,date,cards){
 function conn(id){return `<div class="conn" id="c${id}"><svg id="s${id}"></svg></div>`;}
 
 function buildBracket(bracketId){
-  const r16Cards=[];
-  for(let i=1;i<=8;i++) r16Cards.push(tbdCard(`R16-${i}`,'TBD','TBD'));
+  const isMen=bracketId==='bracket-men';
+  const allTeams=getAllTeams(isMen?M_POOLS:W_POOLS);
+  const menR16=[
+    {no:'M25',local:'09:00',court:'CC',a:'M-A1',b:'M-C2'},
+    {no:'M26',local:'09:00',court:'3', a:'M-G2',b:'M-H2'},
+    {no:'M27',local:'09:50',court:'CC',a:'M-E3',b:'M-F1'},
+    {no:'M28',local:'09:50',court:'2', a:'M-B3',b:'M-D1'},
+    {no:'M29',local:'09:00',court:'2', a:'M-C1',b:'M-H1'},
+    {no:'M30',local:'09:00',court:'4', a:'M-E1',b:'M-F2'},
+    {no:'M31',local:'09:50',court:'4', a:'M-G3',b:'M-A2'},
+    {no:'M32',local:'09:50',court:'3', a:'M-D2',b:'M-B1'}
+  ];
+  const womR16=[
+    {no:'W25',local:'10:40',court:'CC',a:'W-A1',b:'W-H2'},
+    {no:'W26',local:'10:40',court:'3', a:'W-C2',b:'W-E2'},
+    {no:'W27',local:'10:40',court:'2', a:'W-H1',b:'W-G1'},
+    {no:'W28',local:'10:40',court:'4', a:'W-F2',b:'W-D1'},
+    {no:'W29',local:'11:30',court:'3', a:'W-C1',b:'W-B2'},
+    {no:'W30',local:'11:30',court:'2', a:'W-A2',b:'W-F1'},
+    {no:'W31',local:'11:30',court:'CC',a:'W-G2',b:'W-D2'},
+    {no:'W32',local:'11:30',court:'4', a:'W-E2',b:'W-B1'}
+  ];
+  const r16Info=isMen?menR16:womR16;
+  const r16Cards=r16Info.map(r=>matchCard(r.no,r.local,r.court,allTeams[r.a],allTeams[r.b],null,''));
   const qfCards=[];
   for(let i=1;i<=4;i++) qfCards.push(tbdCard(`QF-${i}`,'TBD','TBD'));
   const sfCards=[tbdCard('SF-1','TBD','TBD'),tbdCard('SF-2','TBD','TBD')];
