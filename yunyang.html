@@ -73,7 +73,7 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);min-height:100vh;color
 .mr-sc{font-size:9px;font-weight:600;color:var(--gold-light);flex-shrink:0;white-space:nowrap;}
 .bracket-scroll{overflow-x:auto;padding-bottom:16px;}
 .bracket{display:flex;align-items:flex-start;min-width:max-content;}
-.round{display:flex;flex-direction:column;align-items:stretch;flex-shrink:0;width:220px;}
+.round{display:flex;flex-direction:column;align-items:stretch;flex-shrink:0;width:240px;}
 .round-label{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;color:rgba(255,255,255,0.5);text-align:center;height:44px;margin-bottom:6px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;text-transform:uppercase;}
 .date-sub{font-size:11px;font-weight:700;color:var(--gold-light);letter-spacing:1px;}
 .slot{display:flex;flex-direction:column;justify-content:flex-start;flex-shrink:0;}
@@ -84,7 +84,7 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);min-height:100vh;color
 .sf .slot .match{margin-top:calc((var(--slot)*4 - var(--card-h))/2);}
 .fin .slot{height:calc(var(--slot)*8 - var(--gap));}
 .fin .slot .match{margin-top:calc((var(--slot)*8 - var(--card-h))/2);}
-.match{width:220px;min-height:var(--card-h);background:var(--white);border-radius:7px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,0.2);display:flex;flex-direction:column;flex-shrink:0;}
+.match{width:240px;min-height:var(--card-h);background:var(--white);border-radius:7px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,0.2);display:flex;flex-direction:column;flex-shrink:0;}
 .mi{display:flex;align-items:center;gap:4px;padding:3px 7px;background:rgba(46,196,182,0.08);border-bottom:1px solid var(--gray-light);flex-shrink:0;flex-wrap:wrap;}
 .mi .mno{font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:1px;color:var(--teal-dark);font-weight:700;flex-shrink:0;}
 .mi .mtime{font-size:9px;font-weight:700;color:var(--text);flex-shrink:0;}
@@ -193,7 +193,7 @@ const M_POOLS=[
     {no:'M19',date:'6/19',local:'10:40',court:'3',a:'M-C1',b:'M-C2',w:'M-C1',sc:'2-0 (21-15,21-12)'}
   ]},
   {key:'D',teams:[
-    {id:'M-D1',p1:'Takahashi Takumi',p2:'Ikeda Jumpei',nat:'JPN',jpn:true,seed:4,rank:1},
+    {id:'M-D1',p1:'Takahashi',p2:'Ikeda',nat:'JPN',jpn:true,seed:4,rank:1},
     {id:'M-D2',p1:'Julian',p2:'Krajci',nat:'NZL',jpn:false,seed:13,rank:2},
     {id:'M-D3',p1:'Chong',p2:'P.L.Wong',nat:'HKG',jpn:false,seed:20,rank:3}
   ],matches:[
@@ -220,7 +220,7 @@ const M_POOLS=[
     {no:'M22',date:'6/19',local:'11:30',court:'CC',a:'M-F1',b:'M-F2',w:'M-F2',sc:'1-2 (15-21,21-19,14-16)'}
   ]},
   {key:'G',teams:[
-    {id:'M-G1',p1:'Sadlier',p2:"O'Dea B.",nat:'NZL',jpn:false,seed:7,rank:3},
+    {id:'M-G1',p1:"O'Dea B.",p2:'Sadlier',nat:'NZL',jpn:false,seed:7,rank:3},
     {id:'M-G2',p1:'Guo Sihong',p2:'Song Jinyang',nat:'CHN',jpn:false,seed:10,rank:2},
     {id:'M-G3',p1:'N.A.Tuan',p2:'L.H.Y',nat:'VIE',jpn:false,seed:18,rank:1}
   ],matches:[
@@ -384,31 +384,55 @@ function buildBracket(bracketId){
   const isMen=bracketId==='bracket-men';
   const allTeams=getAllTeams(isMen?M_POOLS:W_POOLS);
   const menR16=[
-    {no:'M25',local:'09:00',court:'CC',a:'M-A1',b:'M-C2'},
-    {no:'M26',local:'09:00',court:'3', a:'M-G2',b:'M-H2'},
-    {no:'M27',local:'09:50',court:'CC',a:'M-E3',b:'M-F1'},
-    {no:'M28',local:'09:50',court:'2', a:'M-B3',b:'M-D1'},
-    {no:'M29',local:'09:00',court:'2', a:'M-C1',b:'M-H1'},
-    {no:'M30',local:'09:00',court:'4', a:'M-E1',b:'M-F2'},
-    {no:'M31',local:'09:50',court:'4', a:'M-G3',b:'M-A2'},
-    {no:'M32',local:'09:50',court:'3', a:'M-D2',b:'M-B1'}
+    {no:'M25',local:'09:00',court:'CC',a:'M-A1',b:'M-C2',w:'M-A1',sc:'2-0 (21-17,21-13)'},
+    {no:'M26',local:'09:00',court:'3', a:'M-G2',b:'M-H2',w:'M-G2',sc:'2-0 (21-18,22-20)'},
+    {no:'M27',local:'09:50',court:'CC',a:'M-E3',b:'M-F1',w:'M-E3',sc:'2-0 (21-19,21-17)'},
+    {no:'M28',local:'09:50',court:'2', a:'M-B3',b:'M-D1',w:'M-B3',sc:'2-0 (21-18,21-15)'},
+    {no:'M29',local:'09:00',court:'2', a:'M-C1',b:'M-H1',w:'M-C1',sc:'2-1 (19-21,21-16,15-13)'},
+    {no:'M30',local:'09:00',court:'4', a:'M-E1',b:'M-F2',w:'M-F2',sc:'0-2 (14-21,14-21)'},
+    {no:'M31',local:'09:50',court:'4', a:'M-G3',b:'M-A2',w:'M-G3',sc:'2-0 (21-18,21-14)'},
+    {no:'M32',local:'09:50',court:'3', a:'M-D2',b:'M-B1',w:'M-B1',sc:'0-2 (14-21,17-21)'}
   ];
   const womR16=[
-    {no:'W25',local:'10:40',court:'CC',a:'W-A1',b:'W-H2'},
-    {no:'W26',local:'10:40',court:'3', a:'W-C2',b:'W-E2'},
-    {no:'W27',local:'10:40',court:'2', a:'W-H1',b:'W-G1'},
-    {no:'W28',local:'10:40',court:'4', a:'W-F2',b:'W-D1'},
-    {no:'W29',local:'11:30',court:'3', a:'W-C1',b:'W-B2'},
-    {no:'W30',local:'11:30',court:'2', a:'W-A2',b:'W-F1'},
-    {no:'W31',local:'11:30',court:'CC',a:'W-G2',b:'W-D2'},
-    {no:'W32',local:'11:30',court:'4', a:'W-E2',b:'W-B1'}
+    {no:'W25',local:'10:40',court:'CC',a:'W-A1',b:'W-H2',w:'W-A1',sc:'2-0 (21-13,21-16)'},
+    {no:'W26',local:'10:40',court:'3', a:'W-C2',b:'W-E2',w:'W-E2',sc:'0-2 (13-21,15-21)'},
+    {no:'W27',local:'10:40',court:'2', a:'W-H1',b:'W-G1',w:'W-H1',sc:'2-1 (21-17,17-21,15-12)'},
+    {no:'W28',local:'10:40',court:'4', a:'W-F2',b:'W-D1',w:'W-D1',sc:'0-2 (10-21,12-21)'},
+    {no:'W29',local:'11:30',court:'3', a:'W-C1',b:'W-B2',w:'W-B2',sc:'1-2 (21-13,19-21,12-15)'},
+    {no:'W30',local:'11:30',court:'2', a:'W-A2',b:'W-F1',w:'W-F1',sc:'0-2 (18-21,10-21)'},
+    {no:'W31',local:'11:30',court:'CC',a:'W-G2',b:'W-D2',w:'W-G2',sc:'2-0 (21-17,21-16)'},
+    {no:'W32',local:'11:30',court:'4', a:'W-E1',b:'W-B1',w:'W-B1',sc:'1-2 (17-21,21-12,11-15)'}
   ];
   const r16Info=isMen?menR16:womR16;
-  const r16Cards=r16Info.map(r=>matchCard(r.no,r.local,r.court,allTeams[r.a],allTeams[r.b],null,''));
-  const qfCards=[];
-  for(let i=1;i<=4;i++) qfCards.push(tbdCard(`QF-${i}`,'TBD','TBD'));
-  const sfCards=[tbdCard('SF-1','TBD','TBD'),tbdCard('SF-2','TBD','TBD')];
-  const finCard=tbdCard('Final','TBD','TBD');
+  const r16Cards=r16Info.map(r=>matchCard(r.no,r.local,r.court,allTeams[r.a],allTeams[r.b],r.w,r.sc));
+  const menQF=[
+    {no:'M33',local:'15:00',court:'2', a:'M-A1',b:'M-G2',w:'M-A1',sc:'2-0 (21-0,21-0)'},
+    {no:'M34',local:'16:00',court:'2', a:'M-E3',b:'M-B3',w:'M-E3',sc:'2-1 (16-21,21-18,15-10)'},
+    {no:'M35',local:'15:00',court:'CC',a:'M-C1',b:'M-F2',w:'M-C1',sc:'2-0 (21-18,21-14)'},
+    {no:'M36',local:'16:00',court:'CC',a:'M-G3',b:'M-B1',w:'M-B1',sc:'0-2 (12-21,14-21)'}
+  ];
+  const womQF=[
+    {no:'W33',local:'17:00',court:'CC',a:'W-A1',b:'W-E2',w:'W-A1',sc:'2-0 (21-16,21-19)'},
+    {no:'W34',local:'17:00',court:'2', a:'W-H1',b:'W-D1',w:'W-D1',sc:'1-2 (15-21,21-18,12-15)'},
+    {no:'W35',local:'19:30',court:'CC',a:'W-B2',b:'W-F1',w:'W-F1',sc:'0-2 (10-21,14-21)'},
+    {no:'W36',local:'20:30',court:'CC',a:'W-G2',b:'W-B1',w:'W-B1',sc:'0-2 (18-21,17-21)'}
+  ];
+  const menSF=[
+    {no:'M37',local:'09:00',court:'CC',a:'M-A1',b:'M-E3',w:null,sc:''},
+    {no:'M38',local:'09:00',court:'2', a:'M-C1',b:'M-B1',w:null,sc:''}
+  ];
+  const womSF=[
+    {no:'W37',local:'10:00',court:'CC',a:'W-A1',b:'W-D1',w:null,sc:''},
+    {no:'W38',local:'10:00',court:'2', a:'W-F1',b:'W-B1',w:null,sc:''}
+  ];
+  const menF3={no:'M39',local:'14:00',court:'CC',a:null,b:null,w:null,sc:''};
+  const womF3={no:'W39',local:'15:00',court:'CC',a:null,b:null,w:null,sc:''};
+  const qfData=isMen?menQF:womQF;
+  const sfData=isMen?menSF:womSF;
+  const f3Data=isMen?menF3:womF3;
+  const qfCards=qfData.map(q=>matchCard(q.no,q.local,q.court,allTeams[q.a],allTeams[q.b],q.w,q.sc));
+  const sfCards=sfData.map(s=>matchCard(s.no,s.local,s.court,allTeams[s.a],allTeams[s.b],s.w,s.sc));
+  const finCard=tbdCard(isMen?'M40':'W40',isMen?'16:00':'17:00','CC');
   const g=bracketId==='bracket-men'?'men':'women';
   const champCard=`<div style="flex-shrink:0;display:flex;flex-direction:column;height:calc(var(--slot)*8 - var(--gap));justify-content:center;" id="ci-${g}">
     <div class="champ-card"><div style="font-size:26px;margin-bottom:4px;">&#127942;</div><div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:3px;opacity:0.85;margin-bottom:4px;">CHAMPION</div><div style="font-size:11px;font-weight:700;">6/21</div></div>
