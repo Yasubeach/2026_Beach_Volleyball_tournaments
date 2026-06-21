@@ -418,30 +418,38 @@ function buildBracket(bracketId){
     {no:'W36',local:'20:30',court:'CC',a:'W-G2',b:'W-B1',w:'W-B1',sc:'0-2 (18-21,17-21)'}
   ];
   const menSF=[
-    {no:'M37',local:'09:00',court:'CC',a:'M-A1',b:'M-E3',w:null,sc:''},
-    {no:'M38',local:'09:00',court:'2', a:'M-C1',b:'M-B1',w:null,sc:''}
+    {no:'M37',local:'09:00',court:'CC',a:'M-A1',b:'M-E3',w:'M-E3',sc:'0-2 (17-21,14-21)'},
+    {no:'M38',local:'09:00',court:'2', a:'M-C1',b:'M-B1',w:'M-C1',sc:'2-0 (21-13,21-15)'}
   ];
   const womSF=[
-    {no:'W37',local:'10:00',court:'CC',a:'W-A1',b:'W-D1',w:null,sc:''},
-    {no:'W38',local:'10:00',court:'2', a:'W-F1',b:'W-B1',w:null,sc:''}
+    {no:'W37',local:'10:00',court:'CC',a:'W-A1',b:'W-D1',w:'W-D1',sc:'0-2 (22-24,13-21)'},
+    {no:'W38',local:'10:00',court:'2', a:'W-F1',b:'W-B1',w:'W-F1',sc:'2-0 (21-18,21-16)'}
   ];
-  const menF3={no:'M39',local:'14:00',court:'CC',a:null,b:null,w:null,sc:''};
-  const womF3={no:'W39',local:'15:00',court:'CC',a:null,b:null,w:null,sc:''};
+  const menF3={no:'M39',local:'14:00',court:'CC',a:'M-A1',b:'M-B1',w:'M-B1',sc:'0-2 (12-21,16-21)'};
+  const womF3={no:'W39',local:'15:00',court:'CC',a:'W-A1',b:'W-B1',w:'W-B1',sc:'0-2 (19-21,19-21)'};
+  const menFin={no:'M40',local:'16:00',court:'CC',a:'M-E3',b:'M-C1',w:'M-E3',sc:'2-0 (Forfeit)'};
+  const womFin={no:'W40',local:'17:00',court:'CC',a:'W-D1',b:'W-F1',w:'W-D1',sc:'2-0 (21-16,21-18)'};
   const qfData=isMen?menQF:womQF;
   const sfData=isMen?menSF:womSF;
   const f3Data=isMen?menF3:womF3;
+  const finData=isMen?menFin:womFin;
   const qfCards=qfData.map(q=>matchCard(q.no,q.local,q.court,allTeams[q.a],allTeams[q.b],q.w,q.sc));
   const sfCards=sfData.map(s=>matchCard(s.no,s.local,s.court,allTeams[s.a],allTeams[s.b],s.w,s.sc));
-  const finCard=tbdCard(isMen?'M40':'W40',isMen?'16:00':'17:00','CC');
+  const finCard=matchCard(finData.no,finData.local,finData.court,allTeams[finData.a],allTeams[finData.b],finData.w,finData.sc);
   const g=bracketId==='bracket-men'?'men':'women';
   const champCard=`<div style="flex-shrink:0;display:flex;flex-direction:column;height:calc(var(--slot)*8 - var(--gap));justify-content:center;" id="ci-${g}">
-    <div class="champ-card"><div style="font-size:26px;margin-bottom:4px;">&#127942;</div><div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:3px;opacity:0.85;margin-bottom:4px;">CHAMPION</div><div style="font-size:11px;font-weight:700;">6/21</div></div>
+    <div class="champ-card"><div style="font-size:26px;margin-bottom:4px;">&#127942;</div><div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:3px;opacity:0.85;margin-bottom:6px;">CHAMPION</div><div style="font-size:11px;font-weight:700;line-height:1.6;">${isMen?'Abolhassan':'Clancy'}<br>${isMen?'GhalehNovi':'Fejes'}</div></div>
   </div>`;
+  const f3Card=matchCard(f3Data.no,f3Data.local,f3Data.court,allTeams[f3Data.a],allTeams[f3Data.b],f3Data.w,f3Data.sc);
   document.getElementById(bracketId).innerHTML=
     rnd('r16','Round of 16','6/20',r16Cards)+conn('A'+bracketId)+
     rnd('qf','Quarter Finals','6/20',qfCards)+conn('B'+bracketId)+
     rnd('sf','Semi Finals','6/21',sfCards)+conn('C'+bracketId)+
-    rnd('fin','Final','6/21',[finCard])+champCard;
+    `<div style="flex-shrink:0;display:flex;flex-direction:column;height:calc(var(--slot)*8 - var(--gap));justify-content:center;gap:80px;">` +
+      rnd('fin','Final','6/21',[finCard]) +
+      `<div><div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;color:rgba(255,255,255,0.45);text-align:center;margin-bottom:6px;">3RD PLACE · 6/21</div>${f3Card}</div>` +
+    `</div>` +
+    champCard;
   requestAnimationFrame(()=>requestAnimationFrame(()=>drawBracket(bracketId)));
 }
 
