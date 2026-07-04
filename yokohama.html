@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1200, initial-scale=0.25, user-scalable=yes, minimum-scale=0.1, maximum-scale=5.0">
+<title>JBVT 2026 第5戦 グランドスラム 横浜赤レンガ倉庫大会</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --gold: #C9A84C;
+  --gold-light: #E8C96A;
+  --ocean: #1A5C8A;
+  --sky: #4FA3D1;
+  --pink: #C2185B;
+  --pink-light: #E91E8C;
+  --white: #fff;
+  --gray: #9BA5B0;
+  --gray-light: #EEF1F4;
+  --text: #1A2533;
+  --card-h: 128px;
+  --gap: 8px;
+  --slot: calc(var(--card-h) + var(--gap));
+}
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: #0a1f35;
+  min-height: 100vh;
+  color: var(--text);
+  padding: 20px 16px 60px;
+}
+
+/* HEADER */
+.hd { text-align:center; margin-bottom:20px; }
+.hd h1 { font-family:'Bebas Neue',cursive; font-size:clamp(22px,4vw,42px); color:#fff; letter-spacing:3px; line-height:1.1; }
+.hd-meta { display:flex; justify-content:center; gap:10px; margin-top:8px; flex-wrap:wrap; }
+.hd-tag { background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:rgba(255,255,255,0.88); font-size:10px; letter-spacing:2px; padding:3px 10px; border-radius:20px; }
+
+/* GENDER TOGGLE */
+.toggle-wrap { display:flex; justify-content:center; gap:10px; margin-bottom:18px; }
+.toggle-btn { font-family:'Bebas Neue',cursive; font-size:15px; letter-spacing:3px; padding:8px 28px; border-radius:6px; border:2px solid rgba(255,255,255,0.25); background:rgba(255,255,255,0.08); color:rgba(255,255,255,0.80); cursor:pointer; transition:all 0.2s; }
+.toggle-btn.men.active  { background:var(--ocean); border-color:var(--sky); color:#fff; box-shadow:0 2px 12px rgba(79,163,209,0.4); }
+.toggle-btn.women.active { background:var(--pink); border-color:var(--pink-light); color:#fff; box-shadow:0 2px 12px rgba(194,24,91,0.4); }
+
+/* SUB TABS (予選 / 本戦) */
+.sub-tabs { display:flex; justify-content:center; gap:8px; margin-bottom:22px; }
+.sub-tab { font-family:'Bebas Neue',cursive; font-size:13px; letter-spacing:2px; padding:6px 22px; border-radius:5px; border:1.5px solid rgba(255,255,255,0.25); background:rgba(255,255,255,0.06); color:rgba(255,255,255,0.80); cursor:pointer; transition:all 0.2s; }
+.sub-tab.active { background:rgba(79,163,209,0.25); border-color:var(--sky); color:#fff; }
+#bracket-women-wrap .sub-tab.active { background:rgba(194,24,91,0.25); border-color:var(--pink-light); }
+
+/* VIEW */
+.view { display:none; }
+.view.active { display:block; }
+.sub-view { display:none; }
+.sub-view.active { display:block; }
+
+/* BRACKET */
+.bracket-scroll { overflow-x:auto; padding-bottom:16px; }
+.bracket { display:flex; align-items:flex-start; min-width:max-content; gap:0; }
+
+/* ROUND */
+.round { display:flex; flex-direction:column; align-items:stretch; flex-shrink:0; width:196px; }
+.round-label { font-family:'Bebas Neue',cursive; font-size:11px; letter-spacing:2px; color:rgba(255,255,255,0.80); text-align:center; height:44px; line-height:16px; margin-bottom:6px; flex-shrink:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; }
+.date-sub { font-family:'Noto Sans JP',sans-serif; font-size:11px; font-weight:700; color:var(--gold-light); letter-spacing:1px; }
+
+/* SLOTS */
+.slot { display:flex; flex-direction:column; justify-content:flex-start; flex-shrink:0; }
+.r1 .slot { height:var(--slot); }
+.r1 .slot:last-child { height:var(--card-h); }
+.sf .slot { height:calc(var(--slot)*2); }
+.sf .slot:last-child { height:calc(var(--slot)*2 - var(--gap)); }
+.sf .slot .match { margin-top:calc((var(--slot)*2 - var(--card-h))/2); }
+.fin .slot { height:calc(var(--slot)*4 - var(--gap)); }
+.fin .slot .match { margin-top:calc((var(--slot)*4 - var(--card-h))/2); }
+
+/* CARD */
+.match { width:196px; min-height:var(--card-h); background:var(--white); border-radius:7px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.18); display:flex; flex-direction:column; flex-shrink:0; }
+
+/* MATCH INFO BAR */
+.match-info { display:flex; align-items:center; gap:5px; padding:3px 7px; background:rgba(26,92,138,0.08); border-bottom:1px solid var(--gray-light); flex-shrink:0; }
+.match-info .mno { font-family:'Bebas Neue',cursive; font-size:9px; letter-spacing:1px; color:var(--ocean); flex-shrink:0; }
+.match-info .mtime { font-size:9px; font-weight:700; color:var(--text); flex-shrink:0; }
+.match-info .mcourt { font-size:9px; color:var(--gray); flex-shrink:0; }
+.match-info .mdot { font-size:8px; color:var(--gray-light); }
+#bracket-women .match-info, .women-quali .match-info { background: rgba(194,24,91,0.06); }
+#bracket-women .match-info .mno, .women-quali .match-info .mno { color: var(--pink); }
+
+/* TEAM ROW */
+.team { flex:1; display:flex; flex-direction:column; justify-content:center; padding:4px 9px; border-bottom:1px solid var(--gray-light); }
+.team:last-child { border-bottom:none; }
+.team-top { display:flex; align-items:center; gap:5px; }
+.badge { font-size:8px; font-weight:700; color:#fff; background:var(--ocean); border-radius:3px; padding:1px 4px; flex-shrink:0; }
+.badge.tbd { background:#bbb; }
+.p1 { font-size:11px; font-weight:500; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; flex:1; }
+.p2 { font-size:11px; font-weight:500; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; padding-left:20px; margin-top:1px; }
+.dim .p1, .dim .p2 { color:var(--gray); }
+#bracket-women .badge, .women-quali .badge { background: var(--pink); }
+
+/* WINNER/LOSER */
+.team.winner { background: linear-gradient(90deg,#FFFAED,#FFF8E7); }
+.team.loser .p1, .team.loser .p2 { color:var(--gray); }
+#bracket-women .team.winner { background: linear-gradient(90deg,#FFF0F7,#FFE4F0); }
+
+/* DATE DIVIDER */
+.date-divider { width:2px; flex-shrink:0; margin:0 4px; position:relative; }
+.date-divider::after { content:''; position:absolute; top:0; bottom:0; left:0; width:2px; border-left:2px dashed rgba(79,163,209,0.5); }
+
+/* CONNECTOR */
+.conn { width:28px; flex-shrink:0; position:relative; }
+.conn svg { position:absolute; top:0; left:0; width:28px; overflow:visible; }
+
+/* CHAMPION */
+.champ-wrap { flex-shrink:0; padding-left:8px; display:flex; flex-direction:column; }
+.champ-card { background:linear-gradient(135deg,#B8862E,#E8C96A,#B8862E); border-radius:10px; padding:14px 12px; width:140px; text-align:center; color:#fff; box-shadow:0 4px 20px rgba(201,168,76,0.4); }
+#bracket-women .champ-card { background:linear-gradient(135deg,#880E4F,#F06292,#880E4F); box-shadow:0 4px 20px rgba(194,24,91,0.4); }
+.champ-trophy { font-size:26px; margin-bottom:4px; }
+.champ-label { font-family:'Bebas Neue',cursive; font-size:11px; letter-spacing:3px; opacity:0.85; margin-bottom:4px; }
+.champ-p1 { font-size:12px; font-weight:700; line-height:1.4; }
+
+/* QUALI (予選) GRID - single row of match cards */
+.quali-grid { display:flex; flex-wrap:wrap; gap:16px; justify-content:center; }
+.quali-item { display:flex; flex-direction:column; align-items:center; gap:6px; }
+.quali-arrow { font-family:'Bebas Neue',cursive; font-size:10px; letter-spacing:1px; color:rgba(255,255,255,0.65); text-align:center; }
+#bracket-women-quali .quali-arrow { color:rgba(255,255,255,0.65); }
+
+/* ===== WHITE BG + GREEN OVERRIDE ===== */
+body { background:#F0F2F5 !important; background-image:none !important; }
+.hd h1 { color:#111 !important; }
+.hd-tag { background:#fff !important; border:1px solid #CCC !important; color:#222 !important; }
+.toggle-btn { background:#fff !important; border:2px solid #CCC !important; color:#222 !important; }
+.sub-tab { background:#fff !important; border:1.5px solid #CCC !important; color:#333 !important; }
+.match { border:1px solid #E0E0E0 !important; box-shadow:0 1px 6px rgba(0,0,0,0.1) !important; }
+.match-info { background:#F0F8F8 !important; border-bottom:1px solid #DDD !important; }
+.women-mode .match-info, #bracket-women .match-info, .women-quali .match-info { background:#F8F0FF !important; }
+.match-info .mno { color:#1A8C85 !important; }
+#bracket-women .match-info .mno, .women-quali .match-info .mno { color:#7B2D8F !important; }
+.match-info .mtime { color:#111 !important; }
+.match-info .mcourt { color:#333 !important; }
+.p1 { color:#2E7D32 !important; font-weight:400; }
+.p2 { color:#2E7D32 !important; font-weight:400; }
+.team.winner .p1, .team.winner .p2 { color:#1B5E20 !important; font-weight:700; }
+.team.loser .p1, .team.loser .p2 { color:#2E7D32 !important; font-weight:400; }
+.team.winner { background:#F1F8E9 !important; }
+#bracket-women .team.winner { background:#F3E5F5 !important; }
+.round-label { color:#222 !important; }
+.date-sub { color:#1A8C85 !important; }
+.badge { background:#1A8C85 !important; color:#fff !important; }
+#bracket-women .badge, .women-quali .badge { background:#7B2D8F !important; }
+.quali-arrow { color:#555 !important; }
+/* ===== END OVERRIDE ===== */
+</style>
+</head>
+<body>
+
+<div class="hd">
+  <h1>第5戦 グランドスラム <em>横浜赤レンガ倉庫大会</em></h1>
+  <div class="hd-meta">
+    <span class="hd-tag" id="tag-gender">MEN'S</span>
+    <span class="hd-tag">JBVT 2026</span>
+  </div>
+</div>
+
+<div class="toggle-wrap">
+  <button class="toggle-btn men active" onclick="switchGender('men',this)">男子</button>
+  <button class="toggle-btn women" onclick="switchGender('women',this)">女子</button>
+</div>
+
+<div class="view active men-view" id="view-men">
+  <div class="sub-tabs" id="sub-tabs-men">
+    <button class="sub-tab active" onclick="switchSub('men','quali',this)">予選 (7/9)</button>
+    <button class="sub-tab" onclick="switchSub('men','draw',this)">本戦 (7/11-12)</button>
+  </div>
+  <div class="sub-view active" id="men-quali"><div class="quali-grid" id="bracket-men-quali"></div></div>
+  <div class="sub-view" id="men-draw"><div class="bracket-scroll"><div class="bracket" id="bracket-men"></div></div></div>
+</div>
+
+<div class="view women-view" id="view-women">
+  <div class="sub-tabs" id="sub-tabs-women">
+    <button class="sub-tab active" onclick="switchSub('women','quali',this)">予選 (7/9)</button>
+    <button class="sub-tab" onclick="switchSub('women','draw',this)">本戦 (7/11-12)</button>
+  </div>
+  <div class="sub-view active" id="women-quali"><div class="quali-grid women-quali" id="bracket-women-quali"></div></div>
+  <div class="sub-view" id="women-draw"><div class="bracket-scroll"><div class="bracket" id="bracket-women"></div></div></div>
+</div>
+
+<script>
+// ===== SWITCH: gender =====
+function switchGender(g, btn){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.toggle-btn').forEach(b=>{ b.classList.remove('active'); b.style.background=''; b.style.borderColor=''; });
+  document.getElementById('view-'+g).classList.add('active');
+  btn.classList.add('active');
+  if(g==='women'){ btn.style.background='#C2185B'; btn.style.borderColor='#C2185B'; }
+  document.getElementById('tag-gender').textContent = g==='men' ? "MEN'S" : "WOMEN'S";
+  // redraw bracket connectors if the draw sub-view is currently active
+  const activeSub = document.querySelector('#view-'+g+' .sub-view.active');
+  if(activeSub && activeSub.id.endsWith('draw')){
+    requestAnimationFrame(()=>requestAnimationFrame(()=>drawBracket('bracket-'+g)));
+  }
+}
+
+// ===== SWITCH: 予選 / 本戦 =====
+function switchSub(g, sub, btn){
+  document.querySelectorAll('#sub-tabs-'+g+' .sub-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('#view-'+g+' .sub-view').forEach(v=>v.classList.remove('active'));
+  document.getElementById(g+'-'+sub).classList.add('active');
+  if(sub==='draw'){
+    requestAnimationFrame(()=>requestAnimationFrame(()=>drawBracket('bracket-'+g)));
+  }
+}
+
+// ===== 予選 (QUALIFICATION) DATA =====
+// Seed番号をキーに、本戦のどのSeed枠に入るかをまとめる
+const MEN_QUALI_SEEDS = {
+  5:{p1:'マルキ ナシム', p2:'詫間 悠'},
+  6:{p1:"Sam O'Dea", p2:"Ben O'Dea"},
+  7:{p1:'古田 史郎', p2:'辰巳 遼'},
+  8:{p1:'渡辺 周馬', p2:'Thomas Hartles'},
+  9:{p1:'黒川 魁', p2:'安達 龍一'},
+  10:{p1:'高橋 巧', p2:'池田 隼平'},
+  11:{p1:'福嶋 晃介', p2:'勝岡 将斗'},
+  12:{p1:'関 寛之', p2:'石川 瀬那'},
+};
+const WOMEN_QUALI_SEEDS = {
+  5:{p1:'中川 知香', p2:'秋重 若菜'},
+  6:{p1:'溝江 明香', p2:'宇都木 乃愛'},
+  7:{p1:'白幡 亜美', p2:'福田 鈴菜'},
+  8:{p1:'衣笠 乃愛', p2:'石原 泉'},
+  9:{p1:'畑辺 千代', p2:'笹渡 美海'},
+  10:{p1:'樫原 美陽', p2:'薮見 真歩'},
+  11:{p1:'酒井 春海', p2:'坪内 紫苑'},
+  12:{p1:'本村 嘉菜', p2:'本村 成優'},
+};
+// 予選1回戦の組み合わせ。mainSeed = 勝者が入る本戦シード番号
+const MEN_QUALI_MATCHES = [
+  {no:'QF M#1', time:'13:00', court:'Court 1', a:5,  b:12, mainSeed:5},
+  {no:'QF M#2', time:'14:00', court:'Court 1', a:9,  b:8,  mainSeed:8},
+  {no:'QF M#3', time:'16:00', court:'Court 1', a:7,  b:10, mainSeed:7},
+  {no:'QF M#4', time:'15:00', court:'Court 1', a:11, b:6,  mainSeed:6},
+];
+const WOMEN_QUALI_MATCHES = [
+  {no:'QF W#1', time:'9:00',  court:'Court 1', a:5,  b:12, mainSeed:5},
+  {no:'QF W#2', time:'10:00', court:'Court 1', a:9,  b:8,  mainSeed:8},
+  {no:'QF W#3', time:'12:00', court:'Court 1', a:7,  b:10, mainSeed:7},
+  {no:'QF W#4', time:'11:00', court:'Court 1', a:11, b:6,  mainSeed:6},
+];
+
+// ===== 本戦 (MAIN DRAW) DATA =====
+// S: Seed1-8。5-8はTBD(予選勝者待ち)。r1card等はosaka.html/nagoya.htmlと同じロジック。
+const MEN = {
+  1:{p1:'水町 泰杜', p2:'黒澤 孝太'},
+  2:{p1:'石島 雄介', p2:'立谷 純太郎'},
+  3:{p1:'Martin Kaufer', p2:'上田 翔貴'},
+  4:{p1:'黒川 寛輝ディラン', p2:'長谷川 徳海'},
+  5:{p1:'予選Seed 5/12 勝者', p2:''},
+  6:{p1:'予選Seed 11/6 勝者', p2:''},
+  7:{p1:'予選Seed 7/10 勝者', p2:''},
+  8:{p1:'予選Seed 9/8 勝者', p2:''},
+};
+const WOMEN = {
+  1:{p1:'柴 麻美', p2:'村上 礼華'},
+  2:{p1:'沢目 繭', p2:'菊地 真結'},
+  3:{p1:'伊藤 桜', p2:'石井 美樹'},
+  4:{p1:'松本 恋', p2:'松本 穏'},
+  5:{p1:'予選Seed 5/12 勝者', p2:''},
+  6:{p1:'予選Seed 11/6 勝者', p2:''},
+  7:{p1:'予選Seed 7/10 勝者', p2:''},
+  8:{p1:'予選Seed 9/8 勝者', p2:''},
+};
+
+// R1: 1v8, 5v4, 3v6, 7v2 の順（SF組み合わせは (0,1)→SF0, (2,3)→SF1）
+const MEN_R1 = [
+  {no:'M#1', a:1, b:8, time:'18:15', court:'Court 1'},
+  {no:'M#2', a:5, b:4, time:'19:15', court:'Court 1'},
+  {no:'M#3', a:3, b:6, time:'17:15', court:'Court 1'},
+  {no:'M#4', a:7, b:2, time:'16:15', court:'Court 1'},
+];
+const MEN_SF = [
+  {no:'M#5', time:'12:00', court:'Court 1'},
+  {no:'M#6', time:'11:00', court:'Court 1'},
+];
+const MEN_FIN = {no:'M#7', time:'14:30', court:'Court 1'};
+
+const WOMEN_R1 = [
+  {no:'W#1', a:1, b:8, time:'12:00', court:'Court 1'},
+  {no:'W#2', a:5, b:4, time:'13:00', court:'Court 1'},
+  {no:'W#3', a:3, b:6, time:'15:00', court:'Court 1'},
+  {no:'W#4', a:7, b:2, time:'14:00', court:'Court 1'},
+];
+const WOMEN_SF = [
+  {no:'W#5', time:'9:00',  court:'Court 1'},
+  {no:'W#6', time:'10:00', court:'Court 1'},
+];
+const WOMEN_FIN = {no:'W#7', time:'13:30', court:'Court 1'};
+
+// ===== HELPERS (共通) =====
+function infoBar(no, time, court){
+  return `<div class="match-info"><span class="mno">${no}</span><span class="mtime">${time}</span><span class="mdot">·</span><span class="mcourt">${court}</span></div>`;
+}
+function seedRow(S, n){
+  const s = S[n];
+  return `<div class="team">
+    <div class="team-top"><span class="badge">${n}</span><span class="p1">${s.p1}</span></div>
+    <div class="p2">${s.p2}</div>
+  </div>`;
+}
+function tbdRow(){
+  return `<div class="team dim">
+    <div class="team-top"><span class="badge tbd">?</span><span class="p1">TBD</span></div>
+    <div class="p2">-</div>
+  </div>`;
+}
+function r1Card(S, match){
+  return `<div class="match">${infoBar(match.no, match.time, match.court)}${seedRow(S, match.a)}${seedRow(S, match.b)}</div>`;
+}
+function sfCard(sfInfo){
+  return `<div class="match">${infoBar(sfInfo.no, sfInfo.time, sfInfo.court)}${tbdRow()}${tbdRow()}</div>`;
+}
+function finCard(finInfo){
+  return `<div class="match">${infoBar(finInfo.no, finInfo.time, finInfo.court)}${tbdRow()}${tbdRow()}</div>`;
+}
+function champCard(){
+  return `<div class="champ-wrap"><div style="display:flex;align-items:center;padding-left:8px;" id="champ-inner">
+    <div class="champ-card">
+      <div class="champ-trophy">🏆</div>
+      <div class="champ-label">CHAMPION</div>
+      <div class="champ-p1">-</div>
+    </div>
+  </div></div>`;
+}
+function round(cls, label, date, cards){
+  return `<div class="round ${cls}"><div class="round-label">${label}<br><span class="date-sub">${date}</span></div>${cards.map(c=>`<div class="slot">${c}</div>`).join('')}</div>`;
+}
+function conn(id){ return `<div class="conn" id="c${id}"><svg id="s${id}"></svg></div>`; }
+function divider(){ return `<div class="date-divider"></div>`; }
+
+function buildBracket(bracketId){
+  const isMen = bracketId==='bracket-men';
+  const S = isMen ? MEN : WOMEN;
+  const R1 = isMen ? MEN_R1 : WOMEN_R1;
+  const SF = isMen ? MEN_SF : WOMEN_SF;
+  const FIN = isMen ? MEN_FIN : WOMEN_FIN;
+  const pid = isMen ? 'M' : 'W';
+
+  const r1Cards = R1.map(m=>r1Card(S,m));
+  const sfCards = [sfCard(SF[0]), sfCard(SF[1])];
+  const finC = finCard(FIN);
+
+  document.getElementById(bracketId).innerHTML =
+    round('r1','1回戦','7/11(土)',r1Cards) +
+    divider() + conn(pid+'rs') +
+    round('sf','準決勝','7/12(日)',sfCards) +
+    conn(pid+'sf') +
+    round('fin','決勝','7/12(日)',[finC]) +
+    champCard();
+
+  requestAnimationFrame(()=>requestAnimationFrame(()=>drawBracket(bracketId)));
+
+  setTimeout(()=>{
+    const br = document.getElementById(bracketId);
+    if(br) br.querySelectorAll('.date-divider').forEach(d=>d.style.height=br.scrollHeight+50+'px');
+  },100);
+}
+
+function drawBracket(bracketId){
+  const br = document.getElementById(bracketId);
+  if(!br) return;
+  const bRect = br.getBoundingClientRect();
+  const totalH = br.scrollHeight;
+  const isMen = bracketId==='bracket-men';
+  const pid = isMen ? 'M' : 'W';
+  const LINE = isMen ? 'rgba(79,163,209,0.55)' : 'rgba(233,30,140,0.55)';
+
+  function centers(cls){
+    return Array.from(br.querySelectorAll(`.${cls} .match`)).map(el=>{
+      const r = el.getBoundingClientRect();
+      return r.top + r.height/2 - bRect.top;
+    });
+  }
+  function draw(svgId, connId, src, dst){
+    const connEl = document.getElementById(connId);
+    const svg = document.getElementById(svgId);
+    if(!connEl || !svg) return;
+    const w = connEl.getBoundingClientRect().width;
+    svg.setAttribute('width', w); svg.setAttribute('height', totalH);
+    let out=''; const xm=w/2, SW=1.5;
+    for(let i=0;i<dst.length;i++){
+      const y1=src[i*2], y2=src[i*2+1], yd=dst[i];
+      out += `<line x1="0" y1="${y1}" x2="${xm}" y2="${y1}" stroke="${LINE}" stroke-width="${SW}"/>`;
+      out += `<line x1="0" y1="${y2}" x2="${xm}" y2="${y2}" stroke="${LINE}" stroke-width="${SW}"/>`;
+      out += `<line x1="${xm}" y1="${y1}" x2="${xm}" y2="${y2}" stroke="${LINE}" stroke-width="${SW}"/>`;
+      out += `<line x1="${xm}" y1="${yd}" x2="${w}" y2="${yd}" stroke="${LINE}" stroke-width="${SW}"/>`;
+    }
+    svg.innerHTML = out;
+  }
+
+  const c_r1 = centers('r1'), c_sf = centers('sf'), c_fin = centers('fin');
+  draw(`s${pid}rs`, `c${pid}rs`, c_r1, c_sf);
+  draw(`s${pid}sf`, `c${pid}sf`, c_sf, c_fin);
+
+  const finEl = br.querySelector('.fin .match');
+  const champInner = br.querySelector('#champ-inner');
+  if(finEl && champInner){
+    const fr = finEl.getBoundingClientRect();
+    const mid = fr.top + fr.height/2 - bRect.top;
+    const cc = champInner.querySelector('.champ-card');
+    const ch = cc.getBoundingClientRect().height;
+    champInner.style.paddingTop = (mid-ch/2)+'px';
+    champInner.style.alignItems = 'flex-start';
+  }
+}
+
+// ===== 予選 (QUALIFICATION) RENDER =====
+function qualiCard(SeedData, match){
+  return `<div class="quali-item">
+    <div class="match">${infoBar(match.no, match.time, match.court)}${seedRow(SeedData, match.a)}${seedRow(SeedData, match.b)}</div>
+    <div class="quali-arrow">→ 本戦 Seed ${match.mainSeed}</div>
+  </div>`;
+}
+function buildQuali(containerId, SeedData, matches){
+  document.getElementById(containerId).innerHTML = matches.map(m=>qualiCard(SeedData,m)).join('');
+}
+
+buildQuali('bracket-men-quali', MEN_QUALI_SEEDS, MEN_QUALI_MATCHES);
+buildQuali('bracket-women-quali', WOMEN_QUALI_SEEDS, WOMEN_QUALI_MATCHES);
+buildBracket('bracket-men');
+buildBracket('bracket-women');
+</script>
+</body>
+</html>
