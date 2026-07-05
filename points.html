@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ビーチバレー ポイント比較表（FIVB × JVA）</title>
+<style>
+  :root{
+    --bg:#F0F2F5;
+    --ink:#212832;
+    --sub:#5b6572;
+    --na:#BDBDBD;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    font-family:"Hiragino Sans","Yu Gothic","Noto Sans JP",-apple-system,BlinkMacSystemFont,sans-serif;
+    color:var(--ink);
+    padding:20px 14px 60px;
+  }
+  .wrap{max-width:1180px;margin:0 auto;}
+  header{margin-bottom:14px;}
+  h1{font-size:1.4rem;margin:0 0 4px;letter-spacing:.02em;}
+  .sub{color:var(--sub);font-size:.88rem;line-height:1.5;}
+
+  /* Tabs */
+  .tabbar{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    margin:16px 0 14px;
+  }
+  .tabbtn{
+    border:none;
+    padding:9px 14px;
+    border-radius:999px;
+    font-size:.82rem;
+    font-weight:600;
+    cursor:pointer;
+    background:#fff;
+    color:var(--sub);
+    box-shadow:0 1px 3px rgba(0,0,0,.1);
+    transition:background .15s,color .15s;
+    white-space:nowrap;
+  }
+  .tabbtn.active{
+    color:#fff;
+  }
+  .panel{display:none;}
+  .panel.active{display:block;}
+
+  .toolbar{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:10px 16px;
+    background:#fff;
+    border-radius:10px;
+    padding:12px 14px;
+    margin-bottom:10px;
+    box-shadow:0 1px 6px rgba(0,0,0,.06);
+    font-size:.82rem;
+  }
+  .toolbar .grouplabel{
+    font-weight:700;
+    font-size:.75rem;
+    color:#fff;
+    padding:3px 9px;
+    border-radius:6px;
+    margin-right:2px;
+  }
+  .chkitem{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    cursor:pointer;
+    user-select:none;
+  }
+  .chkitem input{cursor:pointer;}
+  .toolbar-actions{
+    margin-left:auto;
+    display:flex;
+    gap:8px;
+  }
+  .miniBtn{
+    border:1px solid #d7dbe0;
+    background:#f7f8f9;
+    border-radius:6px;
+    font-size:.72rem;
+    padding:4px 8px;
+    cursor:pointer;
+    color:var(--sub);
+  }
+  .miniBtn:hover{background:#eef0f3;}
+
+  .table-scroll{
+    overflow-x:auto;
+    background:#fff;
+    border-radius:12px;
+    box-shadow:0 2px 10px rgba(0,0,0,.08);
+    padding:4px;
+  }
+  table{
+    border-collapse:separate;
+    border-spacing:0;
+    width:100%;
+    font-size:.85rem;
+  }
+  thead th{position:sticky;top:0;z-index:3;}
+  .grp-row th{
+    padding:9px 6px;
+    text-align:center;
+    font-size:.78rem;
+    font-weight:700;
+    color:#fff;
+  }
+  .grp-rank{background:#37414d;}
+  .col-row th{
+    padding:8px 6px;
+    text-align:center;
+    font-size:.72rem;
+    font-weight:600;
+    line-height:1.25;
+    color:#fff;
+    border-top:1px solid rgba(255,255,255,.25);
+  }
+  tbody th.rank-cell{
+    position:sticky;
+    left:0;
+    background:#eef0f3;
+    font-weight:700;
+    text-align:center;
+    padding:9px 8px;
+    border-bottom:1px solid #e0e3e8;
+    z-index:2;
+    white-space:nowrap;
+  }
+  tbody td{
+    text-align:center;
+    padding:9px 6px;
+    border-bottom:1px solid #e9ebee;
+    white-space:nowrap;
+  }
+  td.na{color:var(--na);font-style:italic;}
+  td.formula{font-size:.72rem;color:#555;}
+  .col-hidden{display:none !important;}
+  .sep{border-left:3px solid #d7dbe0 !important;}
+
+  .note-box{
+    margin-top:16px;
+    background:#fff;
+    border-radius:10px;
+    padding:14px 18px;
+    box-shadow:0 1px 6px rgba(0,0,0,.06);
+    font-size:.8rem;
+    color:var(--sub);
+    line-height:1.7;
+  }
+  .note-box b{color:var(--ink);}
+  .note-box ul{margin:6px 0 0;padding-left:1.2em;}
+
+  @media (max-width:640px){
+    h1{font-size:1.15rem;}
+    table{font-size:.72rem;}
+    .col-row th, tbody td, tbody th.rank-cell{padding:6px 4px;}
+    .toolbar-actions{margin-left:0;width:100%;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>ビーチバレー ポイント比較表　FIVB × JVA</h1>
+    <div class="sub">
+      大会ジャンルごとにタブを切り替えて、順位ごとのポイントを比較できます。各カテゴリー名のチェックを外すと、その列を表から隠せます。
+    </div>
+  </header>
+
+  <div class="tabbar" id="tabbar"></div>
+  <div id="panels"></div>
+
+  <div class="note-box">
+    <b>出典・注意点</b>
+    <ul>
+      <li>FIVB側は2025年3月版 FIVB Beach Volleyball Sport Operations Manual（p.21-22）、JVA側は2026年2月16日〜適用のJVAオフィシャルポイント表を基に作成しています。両団体の最新版が出た場合は差し替えが必要です。</li>
+      <li>「世界大会」「プロツアー」「アジア地区大会」の各タブは、FIVBの国際ポイントとJVAが同一大会の成績に付与する国内換算ポイントを並べています。それ以外のタブ（全日本選手権・国スポ・BVT1〜3・JBVシリーズ・JBV公認）はJVA国内のみの大会で、FIVB側の対応ポイントはありません。</li>
+      <li><b>ファイナル</b>にはFIVB世界ランキングポイントが付与されません（The Finalsはポイント対象外と明記）。JVAは国内ランキング用に独自のポイントを付与します。</li>
+      <li>「アジア地区大会」タブは6・8・29位（大陸大会のみ）と31位（世界大会のみ）を含む統合順位軸を使っています。JVAの表自体には6・8・29位の区分がなく、JVAの運用ルールでは「該当順位がない場合は上位に繰り上げ」るため、該当セルは「―」としています。</li>
+      <li>大陸大会の対応関係（目安）：FIVBの<b>Continental Championships</b>≈JVAの<b>チャンピオンシップ</b>／FIVBの<b>Continental Tour Open・Recognized MultiSports Games</b>≈JVAの<b>アジアツアー/ビーチゲームス</b>／FIVBの<b>Continental Age Group Championships</b>≈JVAの<b>アンダー</b>。JVAは3カテゴリーに集約されているため完全な1対1ではありません。</li>
+      <li><b>JBVシリーズ「チャレンジャー」</b>は固定ポイントではなく、1位が「100pt＋賞金総額÷5000」の計算式、2位以下は1位ポイントに対する割合（例：2位＝1位の80%）で決まります。数値ではなく計算式・割合として表示しています。</li>
+      <li>「N/A／―」は、その大会形式・順位区分が存在しない、または元表に記載がないことを示します。</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+const RANKS16 = ["1","2","3","4","5","7","9","13","17","19","21","25","31","33","37","41"];
+const RANKS19 = ["1","2","3","4","5","6","7","8","9","13","17","19","21","25","29","31","33","37","41"];
+const N = null;
+
+// ---------- TAB DEFINITIONS ----------
+const TABS = [
+{
+  id:"world", label:"世界大会", ranks:RANKS16, color:"#1565C0",
+  groups:[
+    { title:"FIVB 国際ポイント", color:"#1976D2", cols:[
+      {key:"fivbSenior", label:"Senior WCHs", values:[800,720,640,560,480,N,400,N,320,N,N,N,N,160,80,N]},
+      {key:"fivbAge", label:"FIVB Age Group WCHs", values:[160,144,128,112,96,N,72,56,40,N,N,24,N,16,8,4]}
+    ]},
+    { title:"JVA 国内換算ポイント", color:"#388E3C", cols:[
+      {key:"jvaSenior", label:"世界選手権", values:[2400,2200,2000,1800,1520,1360,1200,920,800,720,680,560,440,320,280,240]},
+      {key:"jvaAge", label:"アンダー/世界大学選手権", values:[1000,900,800,700,600,500,450,350,250,200,175,150,125,100,50,25]}
+    ]}
+  ]
+},
+{
+  id:"protour", label:"プロツアー", ranks:RANKS16, color:"#1565C0",
+  groups:[
+    { title:"FIVB Beach Pro Tour", color:"#1976D2", cols:[
+      {key:"fivbElite", label:"Beach Pro Tour - Elite", values:[600,550,500,450,380,N,300,230,200,190,170,150,N,N,N,N]},
+      {key:"fivbChallenge", label:"Beach Pro Tour - Challenge", values:[400,380,360,340,300,N,230,N,170,150,N,110,N,90,N,50]},
+      {key:"fivbFutures", label:"Beach Pro Tour - Futures", values:[200,180,160,140,120,N,90,70,50,N,30,N,N,N,N,N]}
+    ]},
+    { title:"JVA 国内換算ポイント", color:"#388E3C", cols:[
+      {key:"jvaFinals", label:"ファイナル", values:[2100,1925,1750,1575,1330,1190,1050,805,735,665,595,525,455,385,315,245]},
+      {key:"jvaElite", label:"エリート", values:[1800,1650,1500,1350,1140,1020,900,690,630,570,510,450,390,330,270,210]},
+      {key:"jvaChallenge", label:"チャレンジ", values:[1200,1140,1080,1020,900,780,690,570,510,450,390,330,300,270,210,150]},
+      {key:"jvaFutures", label:"フューチャー", values:[600,540,480,420,360,300,270,210,150,120,90,75,60,45,30,15]}
+    ]}
+  ]
+},
+{
+  id:"continental", label:"アジア地区大会/AVC", ranks:RANKS19, color:"#00838F",
+  groups:[
+    { title:"FIVB 大陸大会クラス", color:"#00838F", cols:[
+      {key:"fivbChamps", label:"Continental Championships", values:[400,380,360,340,300,N,N,N,230,N,170,150,N,110,N,N,70,N,N]},
+      {key:"fivbOlyFinal", label:"Continental Olympic Qualification Final", values:[300,270,240,210,180,N,165,N,150,N,120,N,N,90,N,N,N,N,N]},
+      {key:"fivbMulti", label:"Recognized MultiSports Games", values:[240,216,192,168,144,N,N,N,108,84,60,N,N,36,N,N,24,12,6]},
+      {key:"fivbTourOpen", label:"Continental Tour Open / CEV Nations Cup Final", values:[160,144,128,112,96,N,N,N,72,56,40,N,N,24,N,N,16,8,4]},
+      {key:"fivbAgeCont", label:"Continental Age Group Championships", values:[128,115,105,90,80,75,70,65,60,45,35,N,28,20,16,N,12,6,3]},
+      {key:"fivbOlyPrelim", label:"Continental Olympic Qualification Preliminary Phase", values:[120,108,96,84,72,N,N,N,54,42,30,N,N,18,N,N,12,6,3]},
+      {key:"fivbNatTour", label:"Homologated National Tour", values:[20,18,16,14,12,N,11,N,10,N,8,N,N,6,N,N,4,2,N]}
+    ]},
+    { title:"JVA 国内換算ポイント", color:"#7CB342", cols:[
+      {key:"jvaChamps", label:"チャンピオンシップ", values:[1200,1140,1080,1020,900,N,780,N,690,600,540,450,390,330,N,270,210,180,150]},
+      {key:"jvaTourGames", label:"アジアツアー/ビーチゲームス", values:[800,720,640,560,480,N,400,N,360,280,200,160,140,120,N,100,80,40,20]},
+      {key:"jvaAgeCont", label:"アンダー", values:[600,540,480,420,360,N,300,N,270,210,150,120,105,90,N,75,60,30,15]}
+    ]}
+  ]
+},
+{
+  id:"zennihon", label:"全日本選手権", ranks:RANKS16, color:"#EF6C00",
+  groups:[
+    { title:"JVA 全日本選手権", color:"#EF6C00", cols:[
+      {key:"senior", label:"シニア", values:[800,640,533,457,400,320,267,200,160,145,133,114,94,89,80,73]},
+      {key:"college", label:"カレッジ", values:[400,320,267,229,200,160,133,100,80,73,67,57,47,44,40,36]},
+      {key:"junior", label:"ジュニア/マドンナ", values:[320,256,213,183,160,128,107,80,64,58,53,46,38,36,32,29]},
+      {key:"u15", label:"U-15/4人制", values:[240,192,160,137,120,96,80,60,48,44,40,34,28,27,24,22]},
+      {key:"u23", label:"U-23選抜", values:[200,160,133,114,100,80,67,50,40,36,33,29,24,22,20,18]}
+    ]}
+  ]
+},
+{
+  id:"kokusupo", label:"国スポ", ranks:RANKS16, color:"#6D4C41",
+  groups:[
+    { title:"JVA 国民スポーツ大会", color:"#6D4C41", cols:[
+      {key:"honkokutai", label:"本国体", values:[320,256,213,183,160,128,107,80,64,58,53,46,38,36,32,29]},
+      {key:"blockyosen", label:"ブロック予選", values:[100,80,67,57,50,40,33,25,20,18,17,14,12,11,10,9]}
+    ]}
+  ]
+},
+{
+  id:"bvt1", label:"BVT1", ranks:RANKS16, color:"#6A1B9A",
+  groups:[
+    { title:"JVA ジャパンビーチバレーボールツアー BVT1", color:"#6A1B9A", cols:[
+      {key:"gs", label:"グランドスラム(GS)", values:[800,640,533,457,400,320,267,200,160,145,133,114,94,89,80,73]},
+      {key:"op", label:"オープン(OP)", values:[600,480,400,343,300,240,200,150,120,109,100,86,71,67,60,55]}
+    ]}
+  ]
+},
+{
+  id:"bvt2", label:"BVT2", ranks:RANKS16, color:"#AD1457",
+  groups:[
+    { title:"JVA ジャパンビーチバレーボールツアー BVT2", color:"#AD1457", cols:[
+      {key:"sat1", label:"サテライトⅠ", values:[400,320,267,229,200,160,133,100,80,73,67,57,47,44,40,36]},
+      {key:"sat2", label:"サテライトⅡ", values:[320,256,213,183,160,128,107,80,64,58,53,46,38,36,32,29]},
+      {key:"champ", label:"チャンピオンシップ", values:[240,192,160,137,120,96,80,60,48,44,40,34,28,27,24,22]},
+      {key:"under", label:"アンダー", values:[160,128,107,91,80,64,53,40,32,29,27,23,19,18,16,15]}
+    ]}
+  ]
+},
+{
+  id:"bvt3", label:"BVT3", ranks:RANKS16, color:"#D84315",
+  groups:[
+    { title:"JVA ジャパンビーチバレーボールツアー BVT3", color:"#D84315", cols:[
+      {key:"open1", label:"オープンⅠ", values:[600,480,400,343,300,240,200,150,120,109,100,86,71,67,60,55]},
+      {key:"open2", label:"オープンⅡ", values:[450,360,300,257,225,180,150,113,90,82,75,64,53,50,45,41]},
+      {key:"open3", label:"オープンⅢ", values:[320,256,213,183,160,128,107,80,64,58,53,46,38,36,32,29]},
+      {key:"spread", label:"スプレット", values:[80,64,53,46,40,32,27,20,16,15,13,11,9,9,8,7]}
+    ]}
+  ]
+},
+{
+  id:"jbvseries", label:"JBVシリーズ", ranks:RANKS16, color:"#00838F",
+  groups:[
+    { title:"JVA JBVシリーズ", color:"#00838F", cols:[
+      {key:"challenger", label:"チャレンジャー（賞金連動）", formula:true, values:[
+        "100pt+賞金総額/5000","1位pt.の80%","1位pt.の67%","1位pt.の57%","1位pt.の50%",
+        "1位pt.の40%","1位pt.の33%","1位pt.の25%","1位pt.の20%","1位pt.の18%",
+        "1位pt.の17%","1位pt.の14%","1位pt.の12%","1位pt.の11%","1位pt.の10%","1位pt.の9%"
+      ]}
+    ]}
+  ]
+},
+{
+  id:"jbvkounin", label:"JBV公認", ranks:RANKS16, color:"#455A64",
+  groups:[
+    { title:"JVA JBV公認大会", color:"#455A64", cols:[
+      {key:"open", label:"オープン", values:[80,64,53,46,40,32,27,20,16,15,13,11,9,9,8,7]},
+      {key:"grassroots", label:"グラスルーツ(地域限定)", values:[40,32,27,23,20,16,13,10,8,7,7,6,5,4,4,4]},
+      {key:"yon", label:"4人制", values:[25,20,17,14,13,10,8,6,5,5,4,4,3,3,3,2]},
+      {key:"grassnow", label:"グラスバレー/スノーバレー", values:[80,64,53,46,40,32,27,20,16,15,13,11,9,9,8,7]}
+    ]}
+  ]
+}
+];
+
+// ---------- RENDER ----------
+const tabbar = document.getElementById('tabbar');
+const panelsRoot = document.getElementById('panels');
+
+function makeCell(v){
+  const td = document.createElement('td');
+  if(v===null || v===undefined){
+    td.textContent = '—';
+    td.classList.add('na');
+  } else if (typeof v === 'string'){
+    td.textContent = v;
+    td.classList.add('formula');
+  } else {
+    td.textContent = v.toLocaleString();
+  }
+  return td;
+}
+
+TABS.forEach((tab, tIdx)=>{
+  // tab button
+  const btn = document.createElement('button');
+  btn.className = 'tabbtn' + (tIdx===0 ? ' active':'');
+  btn.style.background = tIdx===0 ? tab.color : '#fff';
+  btn.style.color = tIdx===0 ? '#fff' : 'var(--sub)';
+  btn.textContent = tab.label;
+  btn.onclick = ()=> activateTab(tab.id);
+  btn.dataset.tabid = tab.id;
+  btn.dataset.color = tab.color;
+  tabbar.appendChild(btn);
+
+  // panel
+  const panel = document.createElement('div');
+  panel.className = 'panel' + (tIdx===0 ? ' active':'');
+  panel.id = 'panel-' + tab.id;
+
+  // toolbar (checkboxes)
+  const toolbar = document.createElement('div');
+  toolbar.className = 'toolbar';
+  tab.groups.forEach(g=>{
+    const gl = document.createElement('span');
+    gl.className = 'grouplabel';
+    gl.style.background = g.color;
+    gl.textContent = g.title;
+    toolbar.appendChild(gl);
+    g.cols.forEach(c=>{
+      const label = document.createElement('label');
+      label.className = 'chkitem';
+      label.innerHTML = `<input type="checkbox" checked data-target="${tab.id}__${c.key}"> ${c.label}`;
+      toolbar.appendChild(label);
+    });
+  });
+  const actions = document.createElement('div');
+  actions.className = 'toolbar-actions';
+  const showAllBtn = document.createElement('button');
+  showAllBtn.className = 'miniBtn';
+  showAllBtn.textContent = '全て表示';
+  showAllBtn.onclick = ()=> toggleAll(tab, true);
+  const hideAllBtn = document.createElement('button');
+  hideAllBtn.className = 'miniBtn';
+  hideAllBtn.textContent = '全て非表示';
+  hideAllBtn.onclick = ()=> toggleAll(tab, false);
+  actions.appendChild(showAllBtn);
+  actions.appendChild(hideAllBtn);
+  toolbar.appendChild(actions);
+  panel.appendChild(toolbar);
+
+  // table
+  const tableScroll = document.createElement('div');
+  tableScroll.className = 'table-scroll';
+  const table = document.createElement('table');
+
+  const thead = document.createElement('thead');
+  const grpRow = document.createElement('tr');
+  grpRow.className = 'grp-row';
+  const rankTh = document.createElement('th');
+  rankTh.className = 'grp-rank';
+  rankTh.rowSpan = 2;
+  rankTh.textContent = '順位';
+  grpRow.appendChild(rankTh);
+  tab.groups.forEach(g=>{
+    const th = document.createElement('th');
+    th.colSpan = g.cols.length;
+    th.style.background = g.color;
+    th.textContent = g.title;
+    grpRow.appendChild(th);
+  });
+  thead.appendChild(grpRow);
+
+  const colRow = document.createElement('tr');
+  colRow.className = 'col-row';
+  tab.groups.forEach((g, gi)=>{
+    g.cols.forEach((c, ci)=>{
+      const th = document.createElement('th');
+      th.style.background = shade(g.color, ci);
+      th.textContent = c.label;
+      th.dataset.key = tab.id + '__' + c.key;
+      if(gi>0 && ci===0) th.classList.add('sep');
+      colRow.appendChild(th);
+    });
+  });
+  thead.appendChild(colRow);
+  table.appendChild(thead);
+
+  const tbody = document.createElement('tbody');
+  tab.ranks.forEach((r,i)=>{
+    const tr = document.createElement('tr');
+    const rankCell = document.createElement('th');
+    rankCell.className = 'rank-cell';
+    rankCell.textContent = r + '位';
+    tr.appendChild(rankCell);
+    tab.groups.forEach((g,gi)=>{
+      g.cols.forEach((c,ci)=>{
+        const td = makeCell(c.values[i]);
+        td.dataset.key = tab.id + '__' + c.key;
+        if(gi>0 && ci===0) td.classList.add('sep');
+        tr.appendChild(td);
+      });
+    });
+    tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);
+  tableScroll.appendChild(table);
+  panel.appendChild(tableScroll);
+  panelsRoot.appendChild(panel);
+});
+
+function shade(hex, i){
+  // simple lighten function for alternating column shade within a group
+  return i % 2 === 0 ? hex : lighten(hex, 18);
+}
+function lighten(hex, percent){
+  const num = parseInt(hex.replace('#',''),16);
+  let r = (num>>16)+Math.round(255*percent/100);
+  let g = ((num>>8)&0xff)+Math.round(255*percent/100);
+  let b = (num&0xff)+Math.round(255*percent/100);
+  r=Math.min(255,r);g=Math.min(255,g);b=Math.min(255,b);
+  return "#"+(1<<24 | r<<16 | g<<8 | b).toString(16).slice(1);
+}
+
+function activateTab(id){
+  document.querySelectorAll('.tabbtn').forEach(b=>{
+    const active = b.dataset.tabid === id;
+    b.classList.toggle('active', active);
+    b.style.background = active ? b.dataset.color : '#fff';
+    b.style.color = active ? '#fff' : 'var(--sub)';
+  });
+  document.querySelectorAll('.panel').forEach(p=>{
+    p.classList.toggle('active', p.id === 'panel-' + id);
+  });
+}
+
+document.addEventListener('change', (e)=>{
+  if(e.target.matches('input[type="checkbox"][data-target]')){
+    const key = e.target.dataset.target;
+    const checked = e.target.checked;
+    document.querySelectorAll(`[data-key="${key}"]`).forEach(el=>{
+      el.classList.toggle('col-hidden', !checked);
+    });
+  }
+});
+
+function toggleAll(tab, show){
+  tab.groups.forEach(g=>{
+    g.cols.forEach(c=>{
+      const key = tab.id + '__' + c.key;
+      const cb = document.querySelector(`input[data-target="${key}"]`);
+      if(cb){ cb.checked = show; cb.dispatchEvent(new Event('change')); }
+    });
+  });
+}
+</script>
+</body>
+</html>
