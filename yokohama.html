@@ -170,7 +170,7 @@ body { background:#F0F2F5 !important; background-image:none !important; }
 <div class="view active men-view" id="view-men">
   <div class="sub-tabs" id="sub-tabs-men">
     <button class="sub-tab active" onclick="switchSub('men','quali',this)">予選 (7/9) ✓結果</button>
-    <button class="sub-tab" onclick="switchSub('men','draw',this)">本戦 (7/11 1回戦✓結果)</button>
+    <button class="sub-tab" onclick="switchSub('men','draw',this)">本戦 (7/11-12) ✓結果</button>
   </div>
   <div class="sub-view active" id="men-quali"><div class="quali-grid" id="bracket-men-quali"></div></div>
   <div class="sub-view" id="men-draw"><div class="bracket-scroll"><div class="bracket" id="bracket-men"></div></div></div>
@@ -179,7 +179,7 @@ body { background:#F0F2F5 !important; background-image:none !important; }
 <div class="view women-view" id="view-women">
   <div class="sub-tabs" id="sub-tabs-women">
     <button class="sub-tab active" onclick="switchSub('women','quali',this)">予選 (7/9) ✓結果</button>
-    <button class="sub-tab" onclick="switchSub('women','draw',this)">本戦 (7/11 1回戦✓結果)</button>
+    <button class="sub-tab" onclick="switchSub('women','draw',this)">本戦 (7/11-12) ✓結果</button>
   </div>
   <div class="sub-view active" id="women-quali"><div class="quali-grid women-quali" id="bracket-women-quali"></div></div>
   <div class="sub-view" id="women-draw"><div class="bracket-scroll"><div class="bracket" id="bracket-women"></div></div></div>
@@ -248,7 +248,7 @@ const WOMEN_QUALI_MATCHES = [
   {no:'QF W#4', time:'11:00', court:'Court 1', a:11, b:6,  mainSeed:6, winner:'b', score:'0 (16-21, 20-22) 2'},
 ];
 
-// ===== 本戦 (MAIN DRAW) DATA ===== 【予選勝者が確定、7/11-12 は未実施】
+// ===== 本戦 (MAIN DRAW) DATA ===== 【7/11-12 結果確定・優勝決定】
 // S: 各シードの実際の組み合わせ。予選勝者は自身の予選シード番号のまま本戦に入る。
 const MEN = {
   1:{p1:'水町 泰杜', p2:'黒澤 孝太'},
