@@ -278,12 +278,12 @@ const MEN_R1 = [
   {no:'M#3', a:3,  b:6, time:'17:15', court:'Court 1', winner:'b', score:'1 (21-17, 14-21, 8-15) 2'},
   {no:'M#4', a:10, b:2, time:'16:15', court:'Court 1', winner:'b', score:'0 (17-21, 17-21) 2'},
 ];
-// 準決勝の対戦は1回戦の結果により確定（M#1勝者=Seed1 vs M#2勝者=Seed5、M#3勝者=Seed6 vs M#4勝者=Seed2）
+// 準決勝の対戦は1回戦の結果により確定（M#1勝者=Seed1 vs M#2勝者=Seed5、M#3勝者=Seed6 vs M#4勝者=Seed2）【7/12 結果確定】
 const MEN_SF = [
-  {no:'M#5', time:'12:00', court:'Court 1', a:1, b:5},
-  {no:'M#6', time:'11:00', court:'Court 1', a:6, b:2},
+  {no:'M#5', time:'12:00', court:'Court 1', a:1, b:5, winner:'a', score:'2 (21-11, 20-22, 15-13) 1'},
+  {no:'M#6', time:'11:00', court:'Court 1', a:6, b:2, winner:'b', score:'1 (19-21, 21-17, 12-15) 2'},
 ];
-const MEN_FIN = {no:'M#7', time:'14:30', court:'Court 1'};
+const MEN_FIN = {no:'M#7', time:'14:30', court:'Court 1', a:1, b:2, winner:'a', score:'2 (21-19, 21-16) 0'};
 
 const WOMEN_R1 = [
   {no:'W#1', a:1, b:8, time:'12:00', court:'Court 1', winner:'a', score:'2 (21-15, 21-17) 0'},
@@ -291,12 +291,12 @@ const WOMEN_R1 = [
   {no:'W#3', a:3, b:6, time:'15:00', court:'Court 1', winner:'a', score:'2 (Forfeit) 0'},
   {no:'W#4', a:7, b:2, time:'14:00', court:'Court 1', winner:'b', score:'0 (13-21, 15-21) 2'},
 ];
-// 準決勝の対戦は1回戦の結果により確定（W#1勝者=Seed1 vs W#2勝者=Seed4、W#3勝者=Seed3 vs W#4勝者=Seed2）
+// 準決勝の対戦は1回戦の結果により確定（W#1勝者=Seed1 vs W#2勝者=Seed4、W#3勝者=Seed3 vs W#4勝者=Seed2）【7/12 結果確定】
 const WOMEN_SF = [
-  {no:'W#5', time:'9:00',  court:'Court 1', a:1, b:4},
-  {no:'W#6', time:'10:00', court:'Court 1', a:3, b:2},
+  {no:'W#5', time:'9:00',  court:'Court 1', a:1, b:4, winner:'a', score:'2 (18-21, 23-21, 15-12) 1'},
+  {no:'W#6', time:'10:00', court:'Court 1', a:3, b:2, winner:'a', score:'2 (21-19, 21-16) 0'},
 ];
-const WOMEN_FIN = {no:'W#7', time:'13:30', court:'Court 1'};
+const WOMEN_FIN = {no:'W#7', time:'13:30', court:'Court 1', a:1, b:3, winner:'a', score:'2 (21-16, 21-13) 0'};
 
 // ===== HELPERS (共通) =====
 function infoBar(no, time, court){
@@ -322,20 +322,28 @@ function r1Card(S, match){
   return `<div class="match">${infoBar(match.no, match.time, match.court)}${seedRow(S, match.a, clsA)}${seedRow(S, match.b, clsB)}${scoreHtml}</div>`;
 }
 function sfCard(S, sfInfo){
-  const rowA = sfInfo.a!=null ? seedRow(S, sfInfo.a) : tbdRow();
-  const rowB = sfInfo.b!=null ? seedRow(S, sfInfo.b) : tbdRow();
+  const rowA = sfInfo.a!=null ? seedRow(S, sfInfo.a, sfInfo.winner==='a'?'winner':(sfInfo.winner?'loser':'')) : tbdRow();
+  const rowB = sfInfo.b!=null ? seedRow(S, sfInfo.b, sfInfo.winner==='b'?'winner':(sfInfo.winner?'loser':'')) : tbdRow();
   const scoreHtml = sfInfo.score ? `<div class="quali-score">${sfInfo.score}</div>` : '';
   return `<div class="match">${infoBar(sfInfo.no, sfInfo.time, sfInfo.court)}${rowA}${rowB}${scoreHtml}</div>`;
 }
-function finCard(finInfo){
-  return `<div class="match">${infoBar(finInfo.no, finInfo.time, finInfo.court)}${tbdRow()}${tbdRow()}</div>`;
+function finCard(S, finInfo){
+  const rowA = finInfo.a!=null ? seedRow(S, finInfo.a, finInfo.winner==='a'?'winner':(finInfo.winner?'loser':'')) : tbdRow();
+  const rowB = finInfo.b!=null ? seedRow(S, finInfo.b, finInfo.winner==='b'?'winner':(finInfo.winner?'loser':'')) : tbdRow();
+  const scoreHtml = finInfo.score ? `<div class="quali-score">${finInfo.score}</div>` : '';
+  return `<div class="match">${infoBar(finInfo.no, finInfo.time, finInfo.court)}${rowA}${rowB}${scoreHtml}</div>`;
 }
-function champCard(){
+function champCard(S, finInfo){
+  let p1 = '-', p2 = '';
+  if(finInfo.winner){
+    const w = S[finInfo.winner==='a' ? finInfo.a : finInfo.b];
+    p1 = w.p1; p2 = w.p2;
+  }
   return `<div class="champ-wrap"><div style="display:flex;align-items:center;padding-left:8px;" id="champ-inner">
     <div class="champ-card">
       <div class="champ-trophy">🏆</div>
       <div class="champ-label">CHAMPION</div>
-      <div class="champ-p1">-</div>
+      <div class="champ-p1">${p1}${p2 ? '<br>'+p2 : ''}</div>
     </div>
   </div></div>`;
 }
@@ -355,7 +363,7 @@ function buildBracket(bracketId){
 
   const r1Cards = R1.map(m=>r1Card(S,m));
   const sfCards = [sfCard(S,SF[0]), sfCard(S,SF[1])];
-  const finC = finCard(FIN);
+  const finC = finCard(S,FIN);
 
   document.getElementById(bracketId).innerHTML =
     round('r1','1回戦','7/11(土)',r1Cards) +
@@ -363,7 +371,7 @@ function buildBracket(bracketId){
     round('sf','準決勝','7/12(日)',sfCards) +
     conn(pid+'sf') +
     round('fin','決勝','7/12(日)',[finC]) +
-    champCard();
+    champCard(S,FIN);
 
   requestAnimationFrame(()=>requestAnimationFrame(()=>drawBracket(bracketId)));
 
