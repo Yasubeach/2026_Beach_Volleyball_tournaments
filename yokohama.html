@@ -120,6 +120,7 @@ body {
 /* QUALI (予選) GRID - single row of match cards */
 .quali-grid { display:flex; flex-wrap:wrap; gap:16px; justify-content:center; }
 .quali-item { display:flex; flex-direction:column; align-items:center; gap:6px; }
+.quali-score { text-align:center; font-size:10px; font-weight:700; color:#555; padding:4px 6px; background:#FAFAFA; border-top:1px solid var(--gray-light); }
 .quali-arrow { font-family:'Bebas Neue',cursive; font-size:10px; letter-spacing:1px; color:rgba(255,255,255,0.65); text-align:center; }
 #bracket-women-quali .quali-arrow { color:rgba(255,255,255,0.65); }
 
@@ -168,8 +169,8 @@ body { background:#F0F2F5 !important; background-image:none !important; }
 
 <div class="view active men-view" id="view-men">
   <div class="sub-tabs" id="sub-tabs-men">
-    <button class="sub-tab active" onclick="switchSub('men','quali',this)">予選 (7/9)</button>
-    <button class="sub-tab" onclick="switchSub('men','draw',this)">本戦 (7/11-12)</button>
+    <button class="sub-tab active" onclick="switchSub('men','quali',this)">予選 (7/9) ✓結果</button>
+    <button class="sub-tab" onclick="switchSub('men','draw',this)">本戦 (7/11 1回戦✓結果)</button>
   </div>
   <div class="sub-view active" id="men-quali"><div class="quali-grid" id="bracket-men-quali"></div></div>
   <div class="sub-view" id="men-draw"><div class="bracket-scroll"><div class="bracket" id="bracket-men"></div></div></div>
@@ -177,8 +178,8 @@ body { background:#F0F2F5 !important; background-image:none !important; }
 
 <div class="view women-view" id="view-women">
   <div class="sub-tabs" id="sub-tabs-women">
-    <button class="sub-tab active" onclick="switchSub('women','quali',this)">予選 (7/9)</button>
-    <button class="sub-tab" onclick="switchSub('women','draw',this)">本戦 (7/11-12)</button>
+    <button class="sub-tab active" onclick="switchSub('women','quali',this)">予選 (7/9) ✓結果</button>
+    <button class="sub-tab" onclick="switchSub('women','draw',this)">本戦 (7/11 1回戦✓結果)</button>
   </div>
   <div class="sub-view active" id="women-quali"><div class="quali-grid women-quali" id="bracket-women-quali"></div></div>
   <div class="sub-view" id="women-draw"><div class="bracket-scroll"><div class="bracket" id="bracket-women"></div></div></div>
@@ -211,15 +212,15 @@ function switchSub(g, sub, btn){
   }
 }
 
-// ===== 予選 (QUALIFICATION) DATA =====
+// ===== 予選 (QUALIFICATION) DATA ===== 【7/9 結果確定】
 // Seed番号をキーに、本戦のどのSeed枠に入るかをまとめる
 const MEN_QUALI_SEEDS = {
   5:{p1:'マルキ ナシム', p2:'詫間 悠'},
-  6:{p1:"Sam O'Dea", p2:"Ben O'Dea"},
+  6:{p1:"Ben O'Dea", p2:"Sam O'Dea"},
   7:{p1:'古田 史郎', p2:'辰巳 遼'},
   8:{p1:'渡辺 周馬', p2:'Thomas Hartles'},
   9:{p1:'黒川 魁', p2:'安達 龍一'},
-  10:{p1:'高橋 巧', p2:'池田 隼平'},
+  10:{p1:'髙橋 巧', p2:'池田 隼平'},
   11:{p1:'福嶋 晃介', p2:'勝岡 将斗'},
   12:{p1:'関 寛之', p2:'石川 瀬那'},
 };
@@ -233,65 +234,67 @@ const WOMEN_QUALI_SEEDS = {
   11:{p1:'酒井 春海', p2:'坪内 紫苑'},
   12:{p1:'本村 嘉菜', p2:'本村 成優'},
 };
-// 予選1回戦の組み合わせ。mainSeed = 勝者が入る本戦シード番号
+// 予選1回戦の組み合わせ。mainSeed = 勝者が入る本戦シード番号。winner:'a'|'b', score:「A側の並び順」でセット数(セットスコア)
 const MEN_QUALI_MATCHES = [
-  {no:'QF M#1', time:'13:00', court:'Court 1', a:5,  b:12, mainSeed:5},
-  {no:'QF M#2', time:'14:00', court:'Court 1', a:9,  b:8,  mainSeed:8},
-  {no:'QF M#3', time:'16:00', court:'Court 1', a:7,  b:10, mainSeed:7},
-  {no:'QF M#4', time:'15:00', court:'Court 1', a:11, b:6,  mainSeed:6},
+  {no:'QF M#1', time:'13:00', court:'Court 1', a:5,  b:12, mainSeed:5, winner:'a', score:'2 (21-18, 21-15) 0'},
+  {no:'QF M#2', time:'14:00', court:'Court 1', a:9,  b:8,  mainSeed:8, winner:'b', score:'0 (18-21, 19-21) 2'},
+  {no:'QF M#3', time:'16:00', court:'Court 1', a:7,  b:10, mainSeed:7, winner:'b', score:'0 (15-21, 10-21) 2'},
+  {no:'QF M#4', time:'15:00', court:'Court 1', a:11, b:6,  mainSeed:6, winner:'b', score:'0 (17-21, 23-25) 2'},
 ];
 const WOMEN_QUALI_MATCHES = [
-  {no:'QF W#1', time:'9:00',  court:'Court 1', a:5,  b:12, mainSeed:5},
-  {no:'QF W#2', time:'10:00', court:'Court 1', a:9,  b:8,  mainSeed:8},
-  {no:'QF W#3', time:'12:00', court:'Court 1', a:7,  b:10, mainSeed:7},
-  {no:'QF W#4', time:'11:00', court:'Court 1', a:11, b:6,  mainSeed:6},
+  {no:'QF W#1', time:'9:00',  court:'Court 1', a:5,  b:12, mainSeed:5, winner:'a', score:'2 (21-17, 21-13) 0'},
+  {no:'QF W#2', time:'10:00', court:'Court 1', a:9,  b:8,  mainSeed:8, winner:'b', score:'0 (20-22, 6-21) 2'},
+  {no:'QF W#3', time:'12:00', court:'Court 1', a:7,  b:10, mainSeed:7, winner:'a', score:'2 (21-19, 21-18) 0'},
+  {no:'QF W#4', time:'11:00', court:'Court 1', a:11, b:6,  mainSeed:6, winner:'b', score:'0 (16-21, 20-22) 2'},
 ];
 
-// ===== 本戦 (MAIN DRAW) DATA =====
-// S: Seed1-8。5-8はTBD(予選勝者待ち)。r1card等はosaka.html/nagoya.htmlと同じロジック。
+// ===== 本戦 (MAIN DRAW) DATA ===== 【予選勝者が確定、7/11-12 は未実施】
+// S: 各シードの実際の組み合わせ。予選勝者は自身の予選シード番号のまま本戦に入る。
 const MEN = {
   1:{p1:'水町 泰杜', p2:'黒澤 孝太'},
   2:{p1:'石島 雄介', p2:'立谷 純太郎'},
   3:{p1:'Martin Kaufer', p2:'上田 翔貴'},
   4:{p1:'黒川 寛輝ディラン', p2:'長谷川 徳海'},
-  5:{p1:'予選Seed 5/12 勝者', p2:''},
-  6:{p1:'予選Seed 11/6 勝者', p2:''},
-  7:{p1:'予選Seed 7/10 勝者', p2:''},
-  8:{p1:'予選Seed 9/8 勝者', p2:''},
+  5:{p1:'マルキ ナシム', p2:'詫間 悠'},
+  6:{p1:"Ben O'Dea", p2:"Sam O'Dea"},
+  8:{p1:'渡辺 周馬', p2:'Thomas Hartles'},
+  10:{p1:'髙橋 巧', p2:'池田 隼平'},
 };
 const WOMEN = {
   1:{p1:'柴 麻美', p2:'村上 礼華'},
   2:{p1:'沢目 繭', p2:'菊地 真結'},
   3:{p1:'伊藤 桜', p2:'石井 美樹'},
   4:{p1:'松本 恋', p2:'松本 穏'},
-  5:{p1:'予選Seed 5/12 勝者', p2:''},
-  6:{p1:'予選Seed 11/6 勝者', p2:''},
-  7:{p1:'予選Seed 7/10 勝者', p2:''},
-  8:{p1:'予選Seed 9/8 勝者', p2:''},
+  5:{p1:'中川 知香', p2:'秋重 若菜'},
+  6:{p1:'溝江 明香', p2:'宇都木 乃愛'},
+  7:{p1:'白幡 亜美', p2:'福田 鈴菜'},
+  8:{p1:'衣笠 乃愛', p2:'石原 泉'},
 };
 
-// R1: 1v8, 5v4, 3v6, 7v2 の順（SF組み合わせは (0,1)→SF0, (2,3)→SF1）
+// R1: SF組み合わせは (0,1)→SF0, (2,3)→SF1。男子M#4は予選勝者が「Seed10」としてSeed2と対戦。【7/11 結果確定】
 const MEN_R1 = [
-  {no:'M#1', a:1, b:8, time:'18:15', court:'Court 1'},
-  {no:'M#2', a:5, b:4, time:'19:15', court:'Court 1'},
-  {no:'M#3', a:3, b:6, time:'17:15', court:'Court 1'},
-  {no:'M#4', a:7, b:2, time:'16:15', court:'Court 1'},
+  {no:'M#1', a:1,  b:8, time:'18:15', court:'Court 1', winner:'a', score:'2 (21-13, 21-14) 0'},
+  {no:'M#2', a:5,  b:4, time:'19:15', court:'Court 1', winner:'a', score:'2 (21-16, 21-18) 0'},
+  {no:'M#3', a:3,  b:6, time:'17:15', court:'Court 1', winner:'b', score:'1 (21-17, 14-21, 8-15) 2'},
+  {no:'M#4', a:10, b:2, time:'16:15', court:'Court 1', winner:'b', score:'0 (17-21, 17-21) 2'},
 ];
+// 準決勝の対戦は1回戦の結果により確定（M#1勝者=Seed1 vs M#2勝者=Seed5、M#3勝者=Seed6 vs M#4勝者=Seed2）
 const MEN_SF = [
-  {no:'M#5', time:'12:00', court:'Court 1'},
-  {no:'M#6', time:'11:00', court:'Court 1'},
+  {no:'M#5', time:'12:00', court:'Court 1', a:1, b:5},
+  {no:'M#6', time:'11:00', court:'Court 1', a:6, b:2},
 ];
 const MEN_FIN = {no:'M#7', time:'14:30', court:'Court 1'};
 
 const WOMEN_R1 = [
-  {no:'W#1', a:1, b:8, time:'12:00', court:'Court 1'},
-  {no:'W#2', a:5, b:4, time:'13:00', court:'Court 1'},
-  {no:'W#3', a:3, b:6, time:'15:00', court:'Court 1'},
-  {no:'W#4', a:7, b:2, time:'14:00', court:'Court 1'},
+  {no:'W#1', a:1, b:8, time:'12:00', court:'Court 1', winner:'a', score:'2 (21-15, 21-17) 0'},
+  {no:'W#2', a:5, b:4, time:'13:00', court:'Court 1', winner:'b', score:'0 (19-21, 15-21) 2'},
+  {no:'W#3', a:3, b:6, time:'15:00', court:'Court 1', winner:'a', score:'2 (Forfeit) 0'},
+  {no:'W#4', a:7, b:2, time:'14:00', court:'Court 1', winner:'b', score:'0 (13-21, 15-21) 2'},
 ];
+// 準決勝の対戦は1回戦の結果により確定（W#1勝者=Seed1 vs W#2勝者=Seed4、W#3勝者=Seed3 vs W#4勝者=Seed2）
 const WOMEN_SF = [
-  {no:'W#5', time:'9:00',  court:'Court 1'},
-  {no:'W#6', time:'10:00', court:'Court 1'},
+  {no:'W#5', time:'9:00',  court:'Court 1', a:1, b:4},
+  {no:'W#6', time:'10:00', court:'Court 1', a:3, b:2},
 ];
 const WOMEN_FIN = {no:'W#7', time:'13:30', court:'Court 1'};
 
@@ -299,9 +302,9 @@ const WOMEN_FIN = {no:'W#7', time:'13:30', court:'Court 1'};
 function infoBar(no, time, court){
   return `<div class="match-info"><span class="mno">${no}</span><span class="mtime">${time}</span><span class="mdot">·</span><span class="mcourt">${court}</span></div>`;
 }
-function seedRow(S, n){
+function seedRow(S, n, cls){
   const s = S[n];
-  return `<div class="team">
+  return `<div class="team ${cls||''}">
     <div class="team-top"><span class="badge">${n}</span><span class="p1">${s.p1}</span></div>
     <div class="p2">${s.p2}</div>
   </div>`;
@@ -313,10 +316,16 @@ function tbdRow(){
   </div>`;
 }
 function r1Card(S, match){
-  return `<div class="match">${infoBar(match.no, match.time, match.court)}${seedRow(S, match.a)}${seedRow(S, match.b)}</div>`;
+  const scoreHtml = match.score ? `<div class="quali-score">${match.score}</div>` : '';
+  const clsA = match.winner ? (match.winner==='a' ? 'winner' : 'loser') : '';
+  const clsB = match.winner ? (match.winner==='b' ? 'winner' : 'loser') : '';
+  return `<div class="match">${infoBar(match.no, match.time, match.court)}${seedRow(S, match.a, clsA)}${seedRow(S, match.b, clsB)}${scoreHtml}</div>`;
 }
-function sfCard(sfInfo){
-  return `<div class="match">${infoBar(sfInfo.no, sfInfo.time, sfInfo.court)}${tbdRow()}${tbdRow()}</div>`;
+function sfCard(S, sfInfo){
+  const rowA = sfInfo.a!=null ? seedRow(S, sfInfo.a) : tbdRow();
+  const rowB = sfInfo.b!=null ? seedRow(S, sfInfo.b) : tbdRow();
+  const scoreHtml = sfInfo.score ? `<div class="quali-score">${sfInfo.score}</div>` : '';
+  return `<div class="match">${infoBar(sfInfo.no, sfInfo.time, sfInfo.court)}${rowA}${rowB}${scoreHtml}</div>`;
 }
 function finCard(finInfo){
   return `<div class="match">${infoBar(finInfo.no, finInfo.time, finInfo.court)}${tbdRow()}${tbdRow()}</div>`;
@@ -345,7 +354,7 @@ function buildBracket(bracketId){
   const pid = isMen ? 'M' : 'W';
 
   const r1Cards = R1.map(m=>r1Card(S,m));
-  const sfCards = [sfCard(SF[0]), sfCard(SF[1])];
+  const sfCards = [sfCard(S,SF[0]), sfCard(S,SF[1])];
   const finC = finCard(FIN);
 
   document.getElementById(bracketId).innerHTML =
@@ -412,10 +421,13 @@ function drawBracket(bracketId){
   }
 }
 
-// ===== 予選 (QUALIFICATION) RENDER =====
+// ===== 予選 (QUALIFICATION) RENDER ===== 結果確定済み
 function qualiCard(SeedData, match){
+  const clsA = match.winner==='a' ? 'winner' : 'loser';
+  const clsB = match.winner==='b' ? 'winner' : 'loser';
+  const scoreHtml = match.score ? `<div class="quali-score">${match.score}</div>` : '';
   return `<div class="quali-item">
-    <div class="match">${infoBar(match.no, match.time, match.court)}${seedRow(SeedData, match.a)}${seedRow(SeedData, match.b)}</div>
+    <div class="match">${infoBar(match.no, match.time, match.court)}${seedRow(SeedData, match.a, clsA)}${seedRow(SeedData, match.b, clsB)}${scoreHtml}</div>
     <div class="quali-arrow">→ 本戦 Seed ${match.mainSeed}</div>
   </div>`;
 }
